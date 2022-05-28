@@ -18,4 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('pacientes', PacienteController::class);//Ruta para pacientes
+//Route::resource('pacientes', PacienteController::class);//Ruta para pacientes
+
+
+//Route::post('/paciente', [PacienteController::class, 'store']);
