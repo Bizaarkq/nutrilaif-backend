@@ -16,6 +16,10 @@ class PacienteController extends Controller
      */
     public function listarPacientes()
     {
+        //Lista de pacientes enviada como json
+        $listaPaciente=Paciente::all();
+        $data=['success'=>true, 'listaP'=>$listaPaciente];
+        return response()->json($data,200);
     }
 
     /**
