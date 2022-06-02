@@ -2,7 +2,6 @@
 
 namespace App\Models\expediente;
 
-use App\Models\Nutricionista;
 use App\Traits\HasUlid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

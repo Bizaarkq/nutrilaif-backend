@@ -22,13 +22,11 @@ class PacienteController extends Controller
         $nutri=Auth::user()->id;
         /*ACÁ TIENE QUE IR LA LÓGICA DE  COMO USAR EL ID DEL NUTRICIONISTA CON LA LLAVE FORANEA
         QUE TIENE EL PACIENTE PARA SACAR LOS QUE SOLO SON DE ESTE NUTRICIONISTA*/
-        DB::enableQueryLog();
         $pacientes = DB::table('nutrilaif.nutricionista_paciente')
         ->join('nutrilaif.paciente', 'nutrilaif.paciente.id', 'nutrilaif.nutricionista_paciente.id_paciente')
-        ->where('nutrilaif.nutricionista_paciente.id_nutricionista', '=', $nutri)
+        ->where('nutrilaif.nutricionista_paciente.id_nutric', '=', $nutri)
         ->select('paciente.nombre', 'paciente.id')
         ->get();
-        LOG::warning(json_encode(DB::getQueryLog()));
         return json_encode($pacientes);
     }
 
