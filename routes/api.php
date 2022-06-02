@@ -8,8 +8,14 @@ use App\Http\Controllers\PacienteController;
 //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
 
 
-// endpoint protegido
+
+
+
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
-    // more endpoints ...
+    //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
+    Route::prefix('paciente')->group(function(){
+    Route::post('/store', 'App\Http\Controllers\PacienteController@store')->name('paciente');
+    Route::get('/list', 'App\Http\Controllers\PacienteController@listarPacientes')->name('lista-pacientes');
+    });
+    
 });

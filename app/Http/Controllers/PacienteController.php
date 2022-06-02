@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\expediente\Paciente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Ulid\Ulid;
-use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PacienteController extends Controller
 {
@@ -15,11 +17,17 @@ class PacienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function listarPacientes()
-    {
+    {   
         //Lista de pacientes enviada como json
-        $listaPaciente=Paciente::all();
-        $data=['success'=>true, 'listaP'=>$listaPaciente];
-        return response()->json($data,200);
+        $nutri=Auth::user()->id;
+        /*ACÁ TIENE QUE IR LA LÓGICA DE  COMO USAR EL ID DEL NUTRICIONISTA CON LA LLAVE FORANEA
+        QUE TIENE EL PACIENTE PARA SACAR LOS QUE SOLO SON DE ESTE NUTRICIONISTA*/
+        $pacientes = DB::table('nutrilaif.nutricionista_paciente')
+        ->join('nutrilaif.paciente', 'nutrilaif.paciente.id', 'nutrilaif.nutricionista_paciente.id_paciente')
+        ->where('nutrilaif.nutricionista_paciente.id_nutric', '=', $nutri)
+        ->select('paciente.nombre', 'paciente.id')
+        ->get();
+        return json_encode($pacientes);
     }
 
     /**
