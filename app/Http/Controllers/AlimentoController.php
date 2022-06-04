@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\alimento\Alimento;
+use Carbon\Carbon;
 
 class AlimentoController extends Controller
 {
@@ -95,7 +96,9 @@ class AlimentoController extends Controller
      */
     public function destroy($id)
     {
+        $fechaBA=Carbon::now();
         $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->delete();
+        $alimentoDelete->deleted_at=$fechaBA;
+        $alimentoDelete->update();
     }
 }
