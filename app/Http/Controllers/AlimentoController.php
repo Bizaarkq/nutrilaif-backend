@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\alimento\Alimento;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AlimentoController extends Controller
 {
@@ -13,10 +14,20 @@ class AlimentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listarAlimentos()
+
+    public function listarAlimentos($llave=null)
     {
-        $alimentos=Alimento::all();
-        return json_encode($alimentos);
+        if($llave==null){
+            $alimentoQuery=Alimento::all();
+        }
+        else{
+            $alimentoQuery=Alimento::select('nombre_alimento')
+                ->where('nombre_alimento','=','%'.$llave.'%')
+                ->latest()
+                ->take(15)
+                ->get();
+        }
+        return json_encode($alimentoQuery);
     }
 
     /**
