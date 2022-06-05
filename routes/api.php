@@ -15,7 +15,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
     Route::prefix('paciente')->group(function(){
     Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
-    Route::get('/list', 'App\Http\Controllers\Expediente\PacienteControlle@listarPacientes')->name('lista-pacientes');
+    Route::get('/list', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
     });
     
 });
