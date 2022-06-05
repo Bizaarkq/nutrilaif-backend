@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\expediente;
+namespace App\Models\Expediente;
 
 use App\Traits\HasUlid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,17 +12,8 @@ class Paciente extends Model
     use HasFactory;
     use SoftDeletes;
     use HasUlid;
-    protected $table='nutrilaif.paciente';
+    protected $table='paciente';
     protected $KeyTipe='string';
-    protected $fillable = [
-        'nombre',
-        'apellidos',
-        'correo',
-        'direccion',
-        'fecha_nacimiento',
-        'numero_exp',
-        'sexo',
-        'telefono'
-    ];
+    protected $fillable = [];
     protected $dates=['created_at', 'updated_at'];
 }
