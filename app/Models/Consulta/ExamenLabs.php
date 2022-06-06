@@ -8,7 +8,7 @@ use App\Traits\HasUlid;
 // para hacer el softdelete
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class examen_labs extends Model
+class ExamenLabs extends Model
 {
     use HasFactory;
     use SoftDeletes;
