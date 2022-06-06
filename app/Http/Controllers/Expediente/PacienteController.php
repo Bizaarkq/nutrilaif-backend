@@ -18,17 +18,34 @@ class PacienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listarPacientes()
+    public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
         $nutri=Auth::user()->id;
-        /*ACÁ TIENE QUE IR LA LÓGICA DE  COMO USAR EL ID DEL NUTRICIONISTA CON LA LLAVE FORANEA
-        QUE TIENE EL PACIENTE PARA SACAR LOS QUE SOLO SON DE ESTE NUTRICIONISTA*/
-        $pacientes = DB::table('nutricionista_paciente')
-        ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
-        ->where('nutricionista_paciente.id_nutric', '=', $nutri)
-        ->select('paciente.nombre', 'paciente.id')
-        ->get();
+        if($llave==null){
+            $pacientes = DB::table('nutricionista_paciente')
+            ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
+            ->where('nutricionista_paciente.id_nutric', '=', $nutri)
+            ->select('paciente.nombre', 'paciente.id')
+            ->latest()
+            ->take(15)
+            ->get();
+        }else{
+            $pacientes = DB::table('nutricionista_paciente')
+            ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
+            ->where([
+                ['nutricionista_paciente.id_nutric', '=', $nutri],
+                ['paciente.nombre', '=', $llave],
+            ])
+            ->orWhere([
+                ['nutricionista_paciente.id_nutric', '=', $nutri],
+                ['paciente.numero_exp','=',$llave],
+            ])
+            ->select('paciente.nombre', 'paciente.id')
+            ->latest()
+            ->take(15)
+            ->get();
+        }
         return json_encode($pacientes);
     }
 
