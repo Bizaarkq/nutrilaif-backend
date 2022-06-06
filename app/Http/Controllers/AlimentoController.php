@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\alimento\Alimento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Respuesta;
 
 class AlimentoController extends Controller
 {
@@ -48,18 +49,37 @@ class AlimentoController extends Controller
      */
     public function store(Request $request)
     {
-        $alimento= new Alimento;
-        $alimento->nombre_alimento=$request->nombre_alimento;
-        $alimento->calorias_alimento=$request->calorias_alimento;
-        $alimento->grasas_alimento=$request->grasas_alimento;
-        $alimento->proteinas_alimento=$request->proteinas_alimento;
-        $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-        $alimento->hierro_alimento=$request->hierro_alimento;
-        $alimento->potasio_alimento=$request->potasio_alimento;
-        $alimento->calcio_alimento=$request->calcio_alimento;
-        $alimento->sodio_alimento=$request->sodio_alimento;
+       try{
+            DB::beginTransaction();
 
-        $alimento->save();
+            $alimento= new Alimento;
+            $alimento->nombre_alimento=$request->nombre_alimento;
+            $alimento->calorias_alimento=$request->calorias_alimento;
+            $alimento->grasas_alimento=$request->grasas_alimento;
+            $alimento->proteinas_alimento=$request->proteinas_alimento;
+            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
+            $alimento->hierro_alimento=$request->hierro_alimento;
+            $alimento->potasio_alimento=$request->potasio_alimento;
+            $alimento->calcio_alimento=$request->calcio_alimento;
+            $alimento->sodio_alimento=$request->sodio_alimento;
+            $alimento->save();
+
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::titulo_exito_generico,
+                'mensaje'=>Respuesta::mensaje_exito_generico
+            ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::mensaje_error_generico
+            ]);
+        }
+
         
     }
 
