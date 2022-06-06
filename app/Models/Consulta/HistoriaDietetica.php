@@ -8,7 +8,7 @@ use App\Traits\HasUlid;
 // para hacer el softdelete
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class historia_dietetica extends Model
+class HistoriaDietetica extends Model
 {
     use HasFactory;
     use SoftDeletes;
