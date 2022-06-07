@@ -8,9 +8,6 @@ use App\Http\Controller\expediente\PacienteController;
 //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
 
 
-
-
-
 Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
     Route::prefix('paciente')->group(function(){
