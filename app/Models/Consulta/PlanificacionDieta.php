@@ -25,4 +25,7 @@ class PlanificacionDieta extends Model
         'preescripcion_dieta'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];
+    public function consulta(){
+        return $this->belongsTo(Consulta::class);
+    }
 }

@@ -31,9 +31,11 @@ class HistoriaDietetica extends Model
         'agua',
         'observacion_menu_anterior',
         'saciedad',
-        'aliemntos_requiere',
+        'alimentos_requiere',
         'diagnostico_nutricional'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];
-
+    public function consulta(){
+        return $this->belongsTo(Consulta::class);
+    }
 }
