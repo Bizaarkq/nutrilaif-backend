@@ -8,14 +8,18 @@ use App\Http\Controller\expediente\PacienteController;
 //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
 
 
-
-
-
 Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
     Route::prefix('paciente')->group(function(){
-    Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
-    Route::get('/list', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
+        Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
+        Route::get('/list', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
     });
     
+    Route::prefix('catalogo')->group(function(){
+        Route::get('/alimento/listar/{llave?}', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('listar-alimentos');
+        Route::post('/alimento/store', 'App\Http\Controllers\AlimentoController@store')->name('guardar-alimento');
+        Route::post('/alimento/update', 'App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
+        Route::get('/alimento/{id}', 'App\Http\Controllers\AlimentoController@destroy')->name('eliminar-alimento');
+        
+    });
 });
