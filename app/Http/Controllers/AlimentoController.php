@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\alimento\Alimento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class AlimentoController extends Controller
 {
@@ -17,17 +18,28 @@ class AlimentoController extends Controller
 
     public function listarAlimentos($llave=null)
     {
-        if($llave==null){
-            $alimentoQuery=Alimento::all();
-        }
-        else{
-            $alimentoQuery=Alimento::select('nombre_alimento')
-                ->where('nombre_alimento','=','%'.$llave.'%')
+        if ($llave==null) {
+            $alimentoQuery=Alimento::select(
+                'id', 
+                'codigo', 
+                'nombre', 
+                'calorias', 
+                'calcio', 
+                'carbohidratos', 
+                'grasas', 
+                'hierro', 
+                'potasio', 
+                'proteinas', 
+                'sodio')
+                ->get();
+        } else {
+            $alimentoQuery=Alimento::select('id', 'codigo', 'nombre')
+                ->where('nombre', 'like', '%'.$llave.'%')
                 ->latest()
                 ->take(15)
                 ->get();
         }
-        return json_encode($alimentoQuery);
+        return $alimentoQuery;
     }
 
     /**
@@ -60,7 +72,6 @@ class AlimentoController extends Controller
         $alimento->sodio_alimento=$request->sodio_alimento;
 
         $alimento->save();
-        
     }
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Alimento extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table='nutrilaif.alimentos';
+    protected $table='alimentos';
     protected $fillable=[
         'nombre_alimento',
         'calorias_alimento',
