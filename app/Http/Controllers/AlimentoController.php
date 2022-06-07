@@ -34,7 +34,19 @@ class AlimentoController extends Controller
                 'sodio')
                 ->get();
         } else {
-            $alimentoQuery=Alimento::select('id', 'codigo', 'nombre')
+            $alimentoQuery=Alimento::select(
+                'id', 
+                'codigo', 
+                'nombre', 
+                'calorias', 
+                'calcio', 
+                'carbohidratos', 
+                'grasas', 
+                'hierro', 
+                'potasio', 
+                'proteinas', 
+                'sodio'
+                )
                 ->where('nombre', 'like', '%'.$llave.'%')
                 ->latest()
                 ->take(15)
