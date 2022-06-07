@@ -4,13 +4,16 @@ namespace App\Models\Consulta;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasUlid;
 // para hacer el softdelete
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Consulta extends Model
 {
-    use HasFactory, SoftDeletes;
-    
+    use HasFactory;
+    use SoftDeletes;
+    use HasUlid;
+
     protected $table='consulta';
     protected $KeyTipe='string';
     protected $fillable = [

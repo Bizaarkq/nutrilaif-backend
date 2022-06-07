@@ -32,7 +32,7 @@ class ConsultaController extends Controller
             $consultas=Consulta::select('created_at')
             ->where([['nutricionista_consulta.id_nutric','=',$nutri],['id_paciente','=',$llave],])
             ->latest()
-            ->take(5)
+            ->paginate(10)
             ->get();
         }
         return json_decode($consultas);
