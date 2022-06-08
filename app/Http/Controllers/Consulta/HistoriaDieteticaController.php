@@ -1,34 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Consulta;
 
-use Illuminate\Http\Request;
-use App\Models\alimento\Alimento;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use App\Http\Controllers\Controller;
+use App\Models\Consulta\HistoriaDietetica;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlimentoController extends Controller
+class HistoriaDieteticaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function listarAlimentos($llave=null)
+    public function listarHistoriaDietetica($llave)
     {
-        if($llave==null){
-            $alimentoQuery=Alimento::all();
-        }
-        else{
-            $alimentoQuery=Alimento::select('nombre_alimento')
-                ->where('nombre_alimento','=','%'.$llave.'%')
-                ->latest()
-                ->take(15)
-                ->get();
-        }
-        return json_encode($alimentoQuery);
+        $historiaD=HistoriaDietetica::where('id_consulta','=',$llave)
+            ->latest()
+            ->get();
+        return json_decode($historiaD);
     }
 
     /**
@@ -49,22 +41,29 @@ class AlimentoController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+        try{
             DB::beginTransaction();
 
-            $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
-            $alimento->save();
-
-            DB::commit();
+            $historialD=new HistoriaDietetica;
+            $historialD->id_historia_diet=$request->id_historia_diet;
+            $historialD->id_consulta=$request->id_consulta;
+            $historialD->antecedentes_familiares=$request->antecedentes_familiares;
+            $historialD->actividad_fisica=$request->actividad_fisica;
+            $historialD->preferencia_alimen=$request->preferencia_alimen;
+            $historialD->alimentos_no_gustan=$request->alimentos_no_gustan;
+            $historialD->intolerancia_alergia=$request->intolerancia_alergia;
+            $historialD->donde_come=$request->donde_come;
+            $historialD->quien_cocina=$request->quien_cocina;
+            $historialD->estrenimiento=$request->estrenimiento;
+            $historialD->horas_sueno=$request->horas_sueno;
+            $historialD->alcohol=$request->alcohol;
+            $historialD->tabaco=$request->tabaco;
+            $historialD->agua=$request->agua;
+            $historialD->observacion_menu_anterior=$request->observacion_menu_anterior;
+            $historialD->saciedad=$request->saciedad;
+            $historialD->alimentos_quiere=$request->alimentos_quiere;
+            $historialD->diagnostico_nutricional=$request->diagnostico_nutricional;
+            $historialD->save();
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
@@ -79,8 +78,6 @@ class AlimentoController extends Controller
                 'mensaje'=>Respuesta::mensaje_error_generico
             ]);
         }
-
-        
     }
 
     /**
@@ -114,9 +111,8 @@ class AlimentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $historiaDUpdate=HistoriaDietetica::find($id);
+        $historiaDUpdate->update($request->all());
     }
 
     /**
@@ -127,9 +123,6 @@ class AlimentoController extends Controller
      */
     public function destroy($id)
     {
-        $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        //
     }
 }

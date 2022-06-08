@@ -1,34 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Consulta;
 
-use Illuminate\Http\Request;
-use App\Models\alimento\Alimento;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use App\Http\Controllers\Controller;
+use App\Models\Consulta\DatosMedicos;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlimentoController extends Controller
+class DatosMedicosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function listarAlimentos($llave=null)
+    public function listarDatosMedicos($llave)
     {
-        if($llave==null){
-            $alimentoQuery=Alimento::all();
-        }
-        else{
-            $alimentoQuery=Alimento::select('nombre_alimento')
-                ->where('nombre_alimento','=','%'.$llave.'%')
-                ->latest()
-                ->take(15)
-                ->get();
-        }
-        return json_encode($alimentoQuery);
+        $datosMedicos=DatosMedicos::where('id_consulta','=',$llave)
+            ->latest()
+            ->get();
+        return json_decode($datosMedicos);
     }
 
     /**
@@ -49,22 +41,19 @@ class AlimentoController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+        try{
             DB::beginTransaction();
 
-            $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
-            $alimento->save();
+            $datosMedicos=new DatosMedicos;
+            $datosMedicos->id_datos_medic=$request->id_datos_medic;
+            $datosMedicos->id_consulta=$request->id_consulta;
+            $datosMedicos->diagnostico_medic=$request->diagnostico_medic;
+            $datosMedicos->medicamento_suplemento=$request->medicamento_suplemento;
+            $datosMedicos->otros_datos_medic=$request->otros_datos_medic;
+            $datosMedicos->save();
 
             DB::commit();
+
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
@@ -79,8 +68,6 @@ class AlimentoController extends Controller
                 'mensaje'=>Respuesta::mensaje_error_generico
             ]);
         }
-
-        
     }
 
     /**
@@ -114,9 +101,8 @@ class AlimentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $datosMUpdate=DatosMedicos::find($id);
+        $datosMUpdate->update($request->all());
     }
 
     /**
@@ -127,9 +113,6 @@ class AlimentoController extends Controller
      */
     public function destroy($id)
     {
-        $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        //
     }
 }

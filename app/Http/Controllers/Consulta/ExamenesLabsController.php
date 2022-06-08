@@ -1,34 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Consulta;
 
-use Illuminate\Http\Request;
-use App\Models\alimento\Alimento;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use App\Http\Controllers\Controller;
+use App\Models\Consulta\ExamenLabs;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlimentoController extends Controller
+class ExamenesLabsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function listarAlimentos($llave=null)
+    public function listarExamenes($llave)
     {
-        if($llave==null){
-            $alimentoQuery=Alimento::all();
-        }
-        else{
-            $alimentoQuery=Alimento::select('nombre_alimento')
-                ->where('nombre_alimento','=','%'.$llave.'%')
-                ->latest()
-                ->take(15)
-                ->get();
-        }
-        return json_encode($alimentoQuery);
+        $examenes=ExamenLabs::where('id_consulta','=',$llave)
+            ->latest()
+            ->get();
+        return json_decode($examenes);
     }
 
     /**
@@ -49,28 +41,34 @@ class AlimentoController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+        try{
             DB::beginTransaction();
 
-            $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
-            $alimento->save();
-
+            $examenMedic=new ExamenLabs;
+            $examenMedic->id_examenes_lab=$request->id_examenes;
+            $examenMedic->id_consulta=$request->id_consulta;
+            $examenMedic->hemoglobina=$request->hemoglobina;
+            $examenMedic->lifoncitos=$request->linfocitos;
+            $examenMedic->hba_1c=$request->hba_1c;
+            $examenMedic->creatinina=$request->creatinina;
+            $examenMedic->trigliceridos=$request->trigliceridos;
+            $examenMedic->colesterol_total=$request->colesterol_total;
+            $examenMedic->chdl=$request->chdl;
+            $examenMedic->cldl=$request->cldl;
+            $examenMedic->glucosa_ayuno=$request->glucosa_ayuno;
+            $examenMedic->glucosa_post_pondrial=$request->glucosa_post_pondrial;
+            $examenMedic->acido_urico=$request->acido_urico;
+            $examenMedic->albumina=$request->albumina;
+            $examenMedic->save();
+        
             DB::commit();
+
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
                 'mensaje'=>Respuesta::mensaje_exito_generico
             ]);
-        }catch(\Exception $e){
+        } catch(\Exception $e){
             report($e);
             DB::rollBack();
             return response()->json([
@@ -79,8 +77,6 @@ class AlimentoController extends Controller
                 'mensaje'=>Respuesta::mensaje_error_generico
             ]);
         }
-
-        
     }
 
     /**
@@ -114,9 +110,8 @@ class AlimentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $examenUpdate=ExamenLabs::find($id);
+        $examenUpdate->update($request->all());
     }
 
     /**
@@ -127,9 +122,6 @@ class AlimentoController extends Controller
      */
     public function destroy($id)
     {
-        $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        //
     }
 }

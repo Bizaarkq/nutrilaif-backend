@@ -1,34 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Consulta;
 
-use Illuminate\Http\Request;
-use App\Models\alimento\Alimento;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use App\Http\Controllers\Controller;
+use App\Models\Consulta\DatosAntropo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlimentoController extends Controller
+class DatosAntropoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function listarAlimentos($llave=null)
+    public function listarDatosAntropo($llave=null)
     {
         if($llave==null){
-            $alimentoQuery=Alimento::all();
+
+            $datosAntropo=DatosAntropo::where('id_consulta','=',$llave)
+            ->get();
+        }else{
+            $datosAntropo=DatosAntropo::latest()
+            ->get();
         }
-        else{
-            $alimentoQuery=Alimento::select('nombre_alimento')
-                ->where('nombre_alimento','=','%'.$llave.'%')
-                ->latest()
-                ->take(15)
-                ->get();
-        }
-        return json_encode($alimentoQuery);
+        return json_decode($datosAntropo);
     }
 
     /**
@@ -49,28 +46,35 @@ class AlimentoController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+        try{
             DB::beginTransaction();
 
-            $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
-            $alimento->save();
+            $datosAntropo=new DatosAntropo;
+            $datosAntropo->id_datos_antropo=$request->id_datos_antropo;
+            $datosAntropo->id_consulta=$request->id_consulta;
+            $datosAntropo->peso_actual=$request->peso_actual;
+            $datosAntropo->peso_ideal=$request->peso_ideal;
+            $datosAntropo->p_grasa_corporal=$request->p_grasa_corporal;
+            $datosAntropo->p_masa_muscular=$request->p_masa_muscular;
+            $datosAntropo->p_grasa_visceral=$request->p_grasa_visceral;
+            $datosAntropo->peso_meta=$request->peso_meta;
+            $datosAntropo->talla=$request->talla;
+            $datosAntropo->c_cintura=$request->c_cintura;
+            $datosAntropo->c_cadera=$request->c_cadera;
+            $datosAntropo->c_muneca=$request->c_muneca;
+            $datosAntropo->c_brazo_relajado=$request->c_brazo_relajado;
+            $datosAntropo->edad_metabolica=$request->edad_metabolica;
+            $datosAntropo->imc=$request->imc;
+            $datosAntropo->save();
 
             DB::commit();
+
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
                 'mensaje'=>Respuesta::mensaje_exito_generico
             ]);
-        }catch(\Exception $e){
+        } catch(\Exception $e){
             report($e);
             DB::rollBack();
             return response()->json([
@@ -79,8 +83,6 @@ class AlimentoController extends Controller
                 'mensaje'=>Respuesta::mensaje_error_generico
             ]);
         }
-
-        
     }
 
     /**
@@ -114,9 +116,8 @@ class AlimentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $datosAUpdate=DatosAntropo::find($id);
+        $datosAUpdate->update($request->all());
     }
 
     /**
@@ -127,9 +128,6 @@ class AlimentoController extends Controller
      */
     public function destroy($id)
     {
-        $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        //
     }
 }
