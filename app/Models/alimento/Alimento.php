@@ -10,15 +10,16 @@ class Alimento extends Model
     use HasFactory, SoftDeletes;
     protected $table='nutrilaif.alimentos';
     protected $fillable=[
-        'nombre_alimento',
-        'calorias_alimento',
-        'grasas_alimento',
-        'proteinas_alimento',
-        'carbohidratos_alimento',
-        'hierro_alimento',
-        'potasio_alimento',
-        'calcio_alimento',
-        'sodio_alimento'
+        'codigo',
+        'nombre',
+        'calorias',
+        'grasas',
+        'proteinas',
+        'carbohidratos',
+        'hierro',
+        'potasio',
+        'calcio',
+        'sodio'
     ];
     protected $dates=['created_at','updated_at'];
 }
