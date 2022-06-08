@@ -31,7 +31,7 @@ class HistoriaDietetica extends Model
         'agua',
         'observacion_menu_anterior',
         'saciedad',
-        'alimentos_requiere',
+        'alimentos_quiere',
         'diagnostico_nutricional'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];

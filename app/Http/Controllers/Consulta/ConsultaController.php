@@ -23,7 +23,7 @@ class ConsultaController extends Controller
             $consultas=Consulta::select('created_at')
             ->where('nutricionista_consulta.id_nutric','=',$nutri)
             ->latest()
-            ->take(15)
+            ->paginate(15)
             ->get();
         
         }

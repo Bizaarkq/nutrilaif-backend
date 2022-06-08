@@ -61,7 +61,7 @@ class HistoriaDieteticaController extends Controller
             $historialD->agua=$request->agua;
             $historialD->observacion_menu_anterior=$request->observacion_menu_anterior;
             $historialD->saciedad=$request->saciedad;
-            $historialD->alimentos_requiere=$request->alimentos_requiere;
+            $historialD->alimentos_quiere=$request->alimentos_quiere;
             $historialD->diagnostico_nutricional=$request->diagnostico_nutricional;
             $historialD->save();
             return response()->json([

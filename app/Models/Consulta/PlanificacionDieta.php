@@ -18,7 +18,7 @@ class PlanificacionDieta extends Model
     protected $KeyTipe='string';
     protected $fillable = [
         'requerimiento_energetico',
-        'calorias_preescribir',
+        'calorias_prescribir',
         'choc',
         'chon',
         'cooh',
