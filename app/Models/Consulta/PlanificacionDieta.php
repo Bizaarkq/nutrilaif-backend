@@ -28,4 +28,7 @@ class PlanificacionDieta extends Model
     public function consulta(){
         return $this->belongsTo(Consulta::class);
     }
+    public function dieta(){
+        return $this->hasOne(Dieta::class);
+    }
 }

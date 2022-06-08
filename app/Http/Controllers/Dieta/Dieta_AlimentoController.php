@@ -1,29 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Consulta;
+namespace App\Http\Controllers\Dieta;
 
 use App\Helpers\Respuesta;
 use App\Http\Controllers\Controller;
-use App\Models\Consulta\PlanificacionDieta;
+use App\Models\Dieta\Dieta_Alimento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PlanificacionDietaController extends Controller
+class Dieta_AlimentoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function listarPlanificacionDieta($llave)
+    public function listarDietaAlim()
     {
-        $planificacion=DB::table('dieta')
-            ->join('planificacion_dieta','planificacion_dieta.id','dieta.id_planif_dieta')
-            ->where([['dieta.id_planif_dieta','=','planificacion_dieta.id'],['id_consulta','=',$llave]])
-            ->latest()
-            ->get();
-
-        return json_decode($planificacion);
+        $dietaA=DB::table('alimentos')
+        ->join('dieta_alimento','dieta_alimento.id_alimento','alimentos.id')
+        ->where('alimentos.id','=','dieta_alimento.id_alimento')
+        ->get();
+        return json_decode($dietaA);
     }
 
     /**
@@ -33,7 +31,7 @@ class PlanificacionDietaController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -47,25 +45,16 @@ class PlanificacionDietaController extends Controller
         try{
             DB::beginTransaction();
 
-            $planificacionD=new PlanificacionDieta;
-            $planificacionD->id_planif_dieta=$request->id_planif_dieta;
-            $planificacionD->id_consulta=$request->id_consulta;
-            $planificacionD->requermiento_energetico=$request->requermiento_energetico;
-            $planificacionD->calorias_prescribir=$request->calorias_prescribir;
-            $planificacionD->choo=$request->choo;
-            $planificacionD->chon=$request->chon;
-            $planificacionD->cooh=$request->cooh;
-            $planificacionD->prescripcion_dieta=$request->prescripcion_dieta;
-            $planificacionD->save();
-
+            $dieta=new Dieta_Alimento;
+            $dieta->save($request->all());
             DB::commit();
-
+            
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
                 'mensaje'=>Respuesta::mensaje_exito_generico
-            ]);        
-        } catch(\Exception $e){
+            ]);
+        }catch(\Exception $e){
             report($e);
             DB::rollBack();
             return response()->json([
@@ -107,8 +96,26 @@ class PlanificacionDietaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $planificacionUpdate=PlanificacionDieta::find($id);
-        $planificacionUpdate->update($request->all());
+        try{
+            DB::beginTransaction();
+            $dietaUpdate=Dieta_Alimento::find($id);
+            $dietaUpdate->update($request->all());
+            DB::commit();
+
+                return response()->json([
+                    'code'=>200,
+                    'titulo'=>Respuesta::titulo_exito_generico,
+                    'mensaje'=>Respuesta::mensaje_exito_generico
+                ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::mensaje_error_generico
+            ]);
+        }
     }
 
     /**
