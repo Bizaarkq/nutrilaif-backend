@@ -50,7 +50,7 @@ class DatosAntropoController extends Controller
             DB::beginTransaction();
 
             $datosAntropo=new DatosAntropo;
-            $datosAntropo->id_datos_antropo=$request->id_datos_antropo;
+            $datosAntropo->id=$request->id;
             $datosAntropo->id_consulta=$request->id_consulta;
             $datosAntropo->peso_actual=$request->peso_actual;
             $datosAntropo->peso_ideal=$request->peso_ideal;

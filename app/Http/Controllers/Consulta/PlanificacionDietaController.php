@@ -19,8 +19,7 @@ class PlanificacionDietaController extends Controller
     {
         $planificacion=DB::table('dieta')
             ->join('planificacion_dieta','planificacion_dieta.id','dieta.id_planif_dieta')
-            ->where([['dieta.id_planif_dieta','=','planificacion_dieta.id'],['id_consulta','=',$llave]])
-            ->latest()
+            ->where('dieta.id_planif_dieta','like',$llave)
             ->get();
 
         return json_decode($planificacion);
@@ -48,11 +47,11 @@ class PlanificacionDietaController extends Controller
             DB::beginTransaction();
 
             $planificacionD=new PlanificacionDieta;
-            $planificacionD->id_planif_dieta=$request->id_planif_dieta;
+            $planificacionD->id=$request->id;
             $planificacionD->id_consulta=$request->id_consulta;
-            $planificacionD->requermiento_energetico=$request->requermiento_energetico;
+            $planificacionD->requerimiento_energetico=$request->requerimiento_energetico;
             $planificacionD->calorias_prescribir=$request->calorias_prescribir;
-            $planificacionD->choo=$request->choo;
+            $planificacionD->choc=$request->choc;
             $planificacionD->chon=$request->chon;
             $planificacionD->cooh=$request->cooh;
             $planificacionD->prescripcion_dieta=$request->prescripcion_dieta;

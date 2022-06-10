@@ -15,11 +15,11 @@ class Dieta_AlimentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listarDietaAlim()
+    public function listarDietaAlim($llave)
     {
         $dietaA=DB::table('alimentos')
         ->join('dieta_alimento','dieta_alimento.id_alimento','alimentos.id')
-        ->where('alimentos.id','=','dieta_alimento.id_alimento')
+        ->where('alimentos.id','=',$llave)
         ->get();
         return json_decode($dietaA);
     }
@@ -46,7 +46,13 @@ class Dieta_AlimentoController extends Controller
             DB::beginTransaction();
 
             $dieta=new Dieta_Alimento;
-            $dieta->save($request->all());
+            $dieta->id_alimento=$request->id_alimento;
+            $dieta->id_dieta=$request->id_dieta;
+            $dieta->tiempo_comida=$request->tiempo_comida;
+            $dieta->dia_comida=$request->dia_comida;
+            $dieta->cantidad=$request->cantidad;
+            $dieta->unidad_medida=$request->unidad_medida;
+            $dieta->save();
             DB::commit();
             
             return response()->json([
