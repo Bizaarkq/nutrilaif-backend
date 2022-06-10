@@ -31,4 +31,7 @@ class ExamenLabs extends Model
         'albumina'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];
+    public function consulta(){
+        return $this->belongsTo(Consulta::class);
+    }
 }

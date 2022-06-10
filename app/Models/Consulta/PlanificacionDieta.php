@@ -18,11 +18,17 @@ class PlanificacionDieta extends Model
     protected $KeyTipe='string';
     protected $fillable = [
         'requerimiento_energetico',
-        'calorias_preescribir',
+        'calorias_prescribir',
         'choc',
         'chon',
         'cooh',
         'preescripcion_dieta'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];
+    public function consulta(){
+        return $this->belongsTo(Consulta::class);
+    }
+    public function dieta(){
+        return $this->hasOne(Dieta::class);
+    }
 }
