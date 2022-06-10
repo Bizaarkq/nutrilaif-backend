@@ -45,10 +45,10 @@ class ExamenesLabsController extends Controller
             DB::beginTransaction();
 
             $examenMedic=new ExamenLabs;
-            $examenMedic->id_examenes_lab=$request->id_examenes;
+            $examenMedic->id=$request->id;
             $examenMedic->id_consulta=$request->id_consulta;
             $examenMedic->hemoglobina=$request->hemoglobina;
-            $examenMedic->lifoncitos=$request->linfocitos;
+            $examenMedic->linfocitos=$request->linfocitos;
             $examenMedic->hba_1c=$request->hba_1c;
             $examenMedic->creatinina=$request->creatinina;
             $examenMedic->trigliceridos=$request->trigliceridos;

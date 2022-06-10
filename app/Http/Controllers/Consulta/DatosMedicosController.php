@@ -45,11 +45,11 @@ class DatosMedicosController extends Controller
             DB::beginTransaction();
 
             $datosMedicos=new DatosMedicos;
-            $datosMedicos->id_datos_medic=$request->id_datos_medic;
+            $datosMedicos->id=$request->id;
             $datosMedicos->id_consulta=$request->id_consulta;
-            $datosMedicos->diagnostico_medic=$request->diagnostico_medic;
+            $datosMedicos->diagnostico=$request->diagnostico;
             $datosMedicos->medicamento_suplemento=$request->medicamento_suplemento;
-            $datosMedicos->otros_datos_medic=$request->otros_datos_medic;
+            $datosMedicos->otros_datos=$request->otros_datos;
             $datosMedicos->save();
 
             DB::commit();

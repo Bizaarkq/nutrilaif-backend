@@ -8,6 +8,7 @@ use App\Models\Consulta\Consulta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Ulid\Ulid;
 
 class ConsultaController extends Controller
 {
@@ -60,7 +61,7 @@ class ConsultaController extends Controller
             DB::beginTransaction();
 
             $consulta=new Consulta;
-            $consulta->id_consulta=$request->id_consulta;
+            $consulta->id=Ulid::generate(true);;
             $consulta->id_nutric=$request->id_nutric;
             $consulta->id_paciente=$request->id_paciente;
             $consulta->frecuencia_consumo=$request->frecuencia_consumo;

@@ -45,7 +45,7 @@ class HistoriaDieteticaController extends Controller
             DB::beginTransaction();
 
             $historialD=new HistoriaDietetica;
-            $historialD->id_historia_diet=$request->id_historia_diet;
+            $historialD->id=$request->id;
             $historialD->id_consulta=$request->id_consulta;
             $historialD->antecedentes_familiares=$request->antecedentes_familiares;
             $historialD->actividad_fisica=$request->actividad_fisica;
