@@ -74,18 +74,19 @@ class AlimentoController extends Controller
     public function store(Request $request)
     {
        try{
+            $cualquiera=$request->post();
             DB::beginTransaction();
 
             $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
+            $alimento->nombre=$cualquiera['nombre'];
+            $alimento->calorias=$cualquiera['calorias'];
+            $alimento->grasas=$cualquiera['grasas'];
+            $alimento->proteinas=$cualquiera['proteinas'];
+            $alimento->carbohidratos=$cualquiera['carbohidratos'];
+            $alimento->hierro=$cualquiera['hierro'];
+            $alimento->potasio=$cualquiera['potasio'];
+            $alimento->calcio=$cualquiera['calcio'];
+            $alimento->sodio=$cualquiera['sodio'];
             $alimento->save();
 
             DB::commit();
