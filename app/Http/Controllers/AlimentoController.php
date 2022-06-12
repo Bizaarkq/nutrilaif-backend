@@ -134,11 +134,29 @@ class AlimentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $alimento = $request->post();
+        try {
+            DB::beginTransaction();
+            Alimento::where('codigo', '=', $alimento['codigo'])->update($alimento);
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::titulo_exito_generico,
+                'mensaje'=>Respuesta::mensaje_exito_generico
+            ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::mensaje_error_generico
+            ]);
+        }
+        //$alimentoUpdate->update($request->all());
     }
 
     /**
@@ -147,11 +165,12 @@ class AlimentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id_alimento = $request->post();
         $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        DB::beginTransaction();
+        Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
+        DB::commit();
     }
 }
