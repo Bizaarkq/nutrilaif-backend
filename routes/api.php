@@ -20,8 +20,14 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/alimento/store', 'App\Http\Controllers\AlimentoController@store')->name('guardar-alimento');
         Route::post('/alimento/update', 'App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
         Route::get('/alimento/{id}', 'App\Http\Controllers\AlimentoController@destroy')->name('eliminar-alimento');
-        
     });
+
+    Route::prefix('consulta')->group(function(){
+        Route::post('/save/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@guardarConsulta')->name('guardar-consulta');
+        Route::post('/update/{id}', 'App\Http\Controllers\Consulta\ConsultaController@editarConsulta')->name('editar-consulta');
+        Route::get('/get/{id}', 'App\Http\Controllers\Consulta\ConsultaController@getConsulta')->name('obtener-consulta');
+    });
+
 });
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('alimento')->group(function(){
