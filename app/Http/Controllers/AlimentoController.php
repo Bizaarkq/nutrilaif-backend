@@ -7,6 +7,7 @@ use App\Models\alimento\Alimento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 class AlimentoController extends Controller
@@ -75,17 +76,21 @@ class AlimentoController extends Controller
     {
        try{
             DB::beginTransaction();
+            $user = Auth::user()->USERNAME;
 
             $alimento= new Alimento;
-            $alimento->nombre_alimento=$request->nombre_alimento;
-            $alimento->calorias_alimento=$request->calorias_alimento;
-            $alimento->grasas_alimento=$request->grasas_alimento;
-            $alimento->proteinas_alimento=$request->proteinas_alimento;
-            $alimento->carbohidratos_alimento=$request->carbohidratos_alimento;
-            $alimento->hierro_alimento=$request->hierro_alimento;
-            $alimento->potasio_alimento=$request->potasio_alimento;
-            $alimento->calcio_alimento=$request->calcio_alimento;
-            $alimento->sodio_alimento=$request->sodio_alimento;
+            $alimento->nombre=$request->nombre;
+            $alimento->codigo=$request->codigo;
+            $alimento->calorias=$request->calorias;
+            $alimento->grasas=$request->grasas;
+            $alimento->proteinas=$request->proteinas;
+            $alimento->carbohidratos=$request->carbohidratos;
+            $alimento->hierro=$request->hierro;
+            $alimento->potasio=$request->potasio;
+            $alimento->calcio=$request->calcio;
+            $alimento->sodio=$request->sodio;
+            $alimento->created_user=$user;
+            $alimento->updated_user=$user;
             $alimento->save();
 
             DB::commit();
