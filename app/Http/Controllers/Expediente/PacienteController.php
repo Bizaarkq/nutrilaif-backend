@@ -21,13 +21,14 @@ class PacienteController extends Controller
     public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
-        $nutri=Auth::user()->id;
+        DB::enableQueryLog();
+        $nutri=Auth::user()->ID;
         if($llave==null){
             $pacientes = DB::table('nutricionista_paciente')
             ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
             ->where('nutricionista_paciente.id_nutric', '=', $nutri)
             ->select('paciente.nombre', 'paciente.id')
-            ->latest()
+            ->latest('paciente.created_at')
             ->take(15)
             ->get();
         }else{
@@ -42,10 +43,11 @@ class PacienteController extends Controller
                 ['paciente.numero_exp','=',$llave],
             ])
             ->select('paciente.nombre', 'paciente.id')
-            ->latest()
+            ->latest('paciente.created_at')
             ->take(15)
             ->get();
         }
+        Log::warning(json_encode(DB::getQueryLog()));
         return json_encode($pacientes);
     }
 

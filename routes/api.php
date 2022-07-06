@@ -12,23 +12,28 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
     Route::prefix('paciente')->group(function(){
         Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
-        Route::get('/list', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
+        Route::get('/list/{llave?}', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
     });
     
     Route::prefix('catalogo')->group(function(){
         Route::get('/alimento/listar/{llave?}', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('listar-alimentos');
         Route::post('/alimento/store', 'App\Http\Controllers\AlimentoController@store')->name('guardar-alimento');
         Route::post('/alimento/update', 'App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
-        Route::get('/alimento/{id}', 'App\Http\Controllers\AlimentoController@destroy')->name('eliminar-alimento');
-        
+        Route::post('/alimento/delete', 'App\Http\Controllers\AlimentoController@destroy')->name('eliminar-alimento');
     });
+
+    Route::prefix('consulta')->group(function(){
+        Route::post('/save/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@guardarConsulta')->name('guardar-consulta');
+        Route::post('/update/{id}', 'App\Http\Controllers\Consulta\ConsultaController@editarConsulta')->name('editar-consulta');
+        Route::get('/get/{id}', 'App\Http\Controllers\Consulta\ConsultaController@getConsulta')->name('obtener-consulta');
+    });
+
+    Route::prefix('alimento')->group(function(){
+        Route::post('/store', 'App\Http\Controllers\AlimentoController@store')->name('alimento');
+        Route::get('/list', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('lista-alimentos');
+        Route::get('/update','App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
+        Route::get('/delete','App\Http\Controllers\AlimentoController@update')->name('eliminar-alimento');
+        });
+        
+
 });
-// Route::group(['middleware' => 'auth:api'], function () {
-//     Route::prefix('alimento')->group(function(){
-//     Route::post('/store', 'App\Http\Controllers\AlimentoController@store')->name('alimento');
-//     Route::get('/list', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('lista-alimentos');
-//     Route::get('/update','App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
-//     Route::get('/delete','App\Http\Controllers\AlimentoController@update')->name('eliminar-alimento');
-//     });
-    
-// });

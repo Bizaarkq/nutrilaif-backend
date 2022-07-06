@@ -7,6 +7,7 @@ use App\Models\alimento\Alimento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 class AlimentoController extends Controller
@@ -76,17 +77,21 @@ class AlimentoController extends Controller
        try{
             $cualquiera=$request->post();
             DB::beginTransaction();
+            $user = Auth::user()->USERNAME;
 
             $alimento= new Alimento;
-            $alimento->nombre=$cualquiera['nombre'];
-            $alimento->calorias=$cualquiera['calorias'];
-            $alimento->grasas=$cualquiera['grasas'];
-            $alimento->proteinas=$cualquiera['proteinas'];
-            $alimento->carbohidratos=$cualquiera['carbohidratos'];
-            $alimento->hierro=$cualquiera['hierro'];
-            $alimento->potasio=$cualquiera['potasio'];
-            $alimento->calcio=$cualquiera['calcio'];
-            $alimento->sodio=$cualquiera['sodio'];
+            $alimento->nombre=$request->nombre;
+            $alimento->codigo=$request->codigo;
+            $alimento->calorias=$request->calorias;
+            $alimento->grasas=$request->grasas;
+            $alimento->proteinas=$request->proteinas;
+            $alimento->carbohidratos=$request->carbohidratos;
+            $alimento->hierro=$request->hierro;
+            $alimento->potasio=$request->potasio;
+            $alimento->calcio=$request->calcio;
+            $alimento->sodio=$request->sodio;
+            $alimento->created_user=$user;
+            $alimento->updated_user=$user;
             $alimento->save();
 
             DB::commit();
@@ -135,11 +140,29 @@ class AlimentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //Si lo encuentra actualiza toda la información
-        $alimentoUpdate=Alimento::find($id);
-        $alimentoUpdate->update($request->all());
+        $alimento = $request->post();
+        try {
+            DB::beginTransaction();
+            Alimento::where('codigo', '=', $alimento['codigo'])->update($alimento);
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::titulo_exito_generico,
+                'mensaje'=>Respuesta::mensaje_exito_generico
+            ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::mensaje_error_generico
+            ]);
+        }
+        //$alimentoUpdate->update($request->all());
     }
 
     /**
@@ -148,11 +171,12 @@ class AlimentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id_alimento = $request->post();
         $fechaBA=Carbon::now();
-        $alimentoDelete=Alimento::find($id);
-        $alimentoDelete->deleted_at=$fechaBA;
-        $alimentoDelete->update();
+        DB::beginTransaction();
+        Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
+        DB::commit();
     }
 }
