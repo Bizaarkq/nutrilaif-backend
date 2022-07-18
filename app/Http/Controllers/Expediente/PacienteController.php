@@ -104,7 +104,7 @@ class PacienteController extends Controller
             return response()->json([
                 'code' => 200,
                 'titulo' => Respuesta::titulo_exito_generico,
-                'mensaje' => Respuesta::mensaje_exito_generico
+                'mensaje' => Respuesta::mensaje_exito_generico_expediente
             ]);
         } catch (\Exception $e) {
             report($e);
@@ -112,7 +112,7 @@ class PacienteController extends Controller
             return response()->json([
                 'code' => 99,
                 'titulo' => Respuesta::titulo_error_generico,
-                'mensaje' => Respuesta::mensaje_error_generico
+                'mensaje' => Respuesta::mensaje_error_expediente
             ]);
         }
     }
@@ -166,7 +166,7 @@ class PacienteController extends Controller
             return response()->json([
                 'code' => 200,
                 'titulo' => Respuesta::titulo_exito_generico,
-                'mensaje' => Respuesta::mensaje_exito_generico
+                'mensaje' => Respuesta::baja_expediente
             ]);
         } catch (\Exception $e) {
             report($e);
@@ -174,7 +174,7 @@ class PacienteController extends Controller
             return response()->json([
                 'code' => 99,
                 'titulo' => Respuesta::titulo_error_generico,
-                'mensaje' => Respuesta::mensaje_error_generico
+                'mensaje' => Respuesta::error_baja_expediente
             ]);
         }
     }

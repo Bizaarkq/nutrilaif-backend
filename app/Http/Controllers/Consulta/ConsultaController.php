@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ulid\Ulid;
 use App\Models\Expediente\Paciente;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 class ConsultaController extends Controller
@@ -76,7 +76,7 @@ class ConsultaController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::mensaje_exito_generico
+                'mensaje'=>Respuesta::mensaje_exito_generico_consulta
             ]);
         } catch(\Exception $e){
             report($e);
@@ -84,7 +84,7 @@ class ConsultaController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::mensaje_error_consulta
             ]);
         }
     }
@@ -131,7 +131,7 @@ class ConsultaController extends Controller
                 return response()->json([
                     'code'=>200,
                     'titulo'=>Respuesta::titulo_exito_generico,
-                    'mensaje'=>Respuesta::mensaje_exito_generico
+                    'mensaje'=>Respuesta::act_consulta
                 ]);
             }
             else{
@@ -139,7 +139,7 @@ class ConsultaController extends Controller
                 return response()->json([
                     'code'=>99,
                     'titulo'=>Respuesta::titulo_error_generico,
-                    'mensaje'=>Respuesta::mensaje_error_generico
+                    'mensaje'=>Respuesta::error_act_consulta
                 ]);
             }
         } catch(\Exception $e){
@@ -235,7 +235,7 @@ class ConsultaController extends Controller
         return response()->json([
             'code'=>200,
             'titulo'=>Respuesta::titulo_exito_generico,
-            'mensaje'=>Respuesta::mensaje_exito_generico
+            'mensaje'=>Respuesta::mensaje_exito_generico_consulta
         ]);
     }catch(\Exception $e){
         report($e);
@@ -243,7 +243,7 @@ class ConsultaController extends Controller
         return response()->json([
             'code'=>99,
             'titulo'=>Respuesta::titulo_error_generico,
-            'mensaje'=>Respuesta::mensaje_error_generico
+            'mensaje'=>Respuesta::mensaje_error_consulta
         ]);
     }
     }
@@ -280,7 +280,7 @@ class ConsultaController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::error_obt_consulta
             ]);
         }
     }
