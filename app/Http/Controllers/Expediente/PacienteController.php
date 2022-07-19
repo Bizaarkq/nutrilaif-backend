@@ -59,7 +59,12 @@ class PacienteController extends Controller
                 'paciente.correo',
                 'paciente.sexo',
                 'paciente.telefono',
-                'paciente.direccion'
+                'paciente.direccion',
+                'paciente.ocupacion',
+                'paciente.departamento',
+                'paciente.municipio',
+                'paciente.edad',
+                'paciente.fecha_creacion as fechaExpediente',
             )->get();
         }
         Log::warning(json_encode(DB::getQueryLog()));
