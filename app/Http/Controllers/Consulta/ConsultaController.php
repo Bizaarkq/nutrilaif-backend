@@ -230,6 +230,7 @@ class ConsultaController extends Controller
             $consulta->id_paciente = $paciente->id;
             $consulta->id_nutric = $id_nutricionista;
             $consulta->created_user = $user;
+            $consulta->es_subsecuente = 0;
         } elseif ($id==null && $id_paciente!=null) {
             //en caso exista el paciente pero sea una nueva consulta subsecuente
             $consulta = new Consulta;
@@ -237,13 +238,14 @@ class ConsultaController extends Controller
             $consulta->id_paciente = $id_paciente;
             $consulta->id_nutric = $id_nutricionista;
             $consulta->created_user = $user;
+            $consulta->es_subsecuente = 1;
         } elseif ($id!=null && $id_paciente!=null) {
             //en caso exista la consulta y el paciente sería una edicion de consulta
             $consulta = Consulta::find($id);
             $consulta->dieta = $datosConsulta['dieta'];
         }
         $consulta->recordatorio = json_encode($datosConsulta['recordatorio']);
-        $consulta->frecuencia_consumo = $datosConsulta['frecuencia_consumo'];
+        $consulta->frecuencia_consumo = json_encode($datosConsulta['frecuencia_consumo']);
         $consulta->es_borrador = $datosConsulta['es_borrador'];
         $consulta->updated_user = $user;
         $consulta->save();
@@ -280,14 +282,21 @@ class ConsultaController extends Controller
     public function getConsulta($id){
         try {
 
-            $consulta = Consulta::where('id', $id)->select('id', 'id_paciente', 'fecha_dieta', 'recordatorio', 'frecuencia_consumo','dieta', 'es_borrador')->first();
+            $consulta = Consulta::where('id', $id)->select(
+                'id',
+                'id_paciente', 
+                'fecha_dieta', 
+                'recordatorio', 
+                'frecuencia_consumo',
+                'dieta', 
+                'es_borrador',
+                'es_subsecuente'
+            )->first();
             $historiaDietetica = $consulta->historiaDietetica->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $planificacionDieta = optional($consulta->planificacionDieta)->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-
-            $es_subsecuente = Consulta::where('id_paciente', '=', json_decode($consulta,true)['id_paciente'])->count() > 1 ? true : false;
             
             $formulario = [
             'recordatorio' => $consulta->recordatorio,
@@ -301,7 +310,7 @@ class ConsultaController extends Controller
                 'examen_labs' => $examenLabs
             ],
             "es_borrador" => $consulta->es_borrador == 1 ? true : false,
-            "es_subsecuente" => $es_subsecuente
+            "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,
         ];
             return $formulario;
         }catch(\Exception $e){
