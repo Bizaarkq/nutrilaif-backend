@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/save/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@guardarConsulta')->name('guardar-consulta');
         Route::post('/update/{id}', 'App\Http\Controllers\Consulta\ConsultaController@editarConsulta')->name('editar-consulta');
         Route::get('/get/{id}', 'App\Http\Controllers\Consulta\ConsultaController@getConsulta')->name('obtener-consulta');
+        Route::get('/list/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@listarConsulta')->name('listar-consulta');
     });
 
     Route::prefix('alimento')->group(function(){
