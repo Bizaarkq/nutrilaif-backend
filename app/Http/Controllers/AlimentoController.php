@@ -98,7 +98,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::mensaje_exito_generico
+                'mensaje'=>Respuesta::mensaje_exito_generico_alimentos
             ]);
         }catch(\Exception $e){
             report($e);
@@ -106,7 +106,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::mensaje_error_alimentos
             ]);
         }
     }
@@ -151,7 +151,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::mensaje_exito_generico
+                'mensaje'=>Respuesta::act_alimentos
             ]);
         }catch(\Exception $e){
             report($e);
@@ -159,7 +159,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::error_act_alimentos
             ]);
         }
         //$alimentoUpdate->update($request->all());
@@ -174,9 +174,24 @@ class AlimentoController extends Controller
     public function destroy(Request $request)
     {
         $id_alimento = $request->post();
-        $fechaBA=Carbon::now();
-        DB::beginTransaction();
-        Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
-        DB::commit();
+        try{
+            $fechaBA=Carbon::now();
+            DB::beginTransaction();
+            Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::titulo_exito_generico,
+                'mensaje'=>Respuesta::borrado_alimentos
+            ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::error_borrado_alimentos
+            ]);
+        }
     }
 }
