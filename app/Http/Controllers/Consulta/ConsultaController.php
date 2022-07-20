@@ -172,7 +172,7 @@ class ConsultaController extends Controller
         $id_paciente = array_key_exists('id_paciente', $datosConsulta['paciente']) ? $datosConsulta['paciente']['id_paciente'] : null;
         $id_consulta = $id == null ? Ulid::generate(true) : $id;
         $user = Auth::user()->USERNAME;
-        $numero_expediente = '';
+        $numero_expediente = null;
         DB::beginTransaction();
         DB::enableQueryLog();
         $id_nutricionista =  Auth::user()->ID;
@@ -265,7 +265,7 @@ class ConsultaController extends Controller
         return response()->json([
             'code'=>200,
             'titulo'=>Respuesta::titulo_exito_generico,
-            'mensaje'=>Respuesta::mensaje_exito_generico_consulta
+            'mensaje'=>Respuesta::mensaje_exito_generico_consulta,
             'data' => $numero_expediente
         ]);
     }catch(\Exception $e){
@@ -299,7 +299,7 @@ class ConsultaController extends Controller
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             
             $formulario = [
-            'recordatorio' => $consulta->recordatorio,
+            'recordatorio' => json_decode($consulta->recordatorio,true),
             'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
             'planificacion_dieta' => $planificacionDieta,
             'dieta' => json_decode($consulta->dieta,true),

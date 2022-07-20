@@ -35,7 +35,9 @@ class PacienteController extends Controller
                 DB::raw("CONCAT(paciente.nombre, ' ', paciente.apellido) AS nombre_completo"),
                 'paciente.nombre',
                 'paciente.apellido',
-                'paciente.id'
+                'paciente.id',
+                'paciente.correo',
+                'paciente.telefono',
             )
             ->orderByDesc('paciente.created_at')
             ->get();
