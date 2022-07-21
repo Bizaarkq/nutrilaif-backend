@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ulid\Ulid;
 use App\Models\Expediente\Paciente;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Log;
 
@@ -23,22 +24,30 @@ class ConsultaController extends Controller
     {
         $nutri=Auth::user()->ID;
         if($llave==null){
-            $consultas=Consulta::select('consulta.id','consulta.created_at', 'consulta.es_borrador')
+            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.es_borrador')
             ->where('id_nutric','=',$nutri)
             ->join('paciente', 'paciente.id', '=', 'consulta.id_paciente')
             ->where('paciente.deleted_at', '=', null)
-            ->orderBy('created_at','desc')
+            ->orderBy('fecha_creacion','desc')
             ->get();
         }
         else{
-            $consultas=Consulta::select('consulta.id','consulta.created_at', 'consulta.es_borrador')
+            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.es_borrador')
             ->where([['id_nutric','=',$nutri],['id_paciente','=',$llave],])
             ->join('paciente', 'paciente.id', '=', 'consulta.id_paciente')
             ->where('paciente.deleted_at', '=', null)
-            ->orderBy('created_at','desc')
+            ->orderBy('fecha_creacion','desc')
             ->get();
         }
-        return json_decode($consultas);
+
+        $consultas = json_decode(json_encode($consultas), true);
+        
+        foreach ($consultas as $key => $value) {
+            $fecha = Carbon::parse($value['fecha_creacion']);
+            $consultas[$key]['fecha_creacion'] = $fecha->dayName . ', ' . $fecha->day . ' de ' . $fecha->monthName . ' de ' . $fecha->year;
+        }
+
+        return $consultas;
     }
 
     /**
