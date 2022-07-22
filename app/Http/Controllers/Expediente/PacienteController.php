@@ -21,7 +21,7 @@ class PacienteController extends Controller
     public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
-        DB::enableQueryLog();
+        
         $nutri=Auth::user()->ID;
         $query = DB::table('nutricionista_paciente')
         ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
@@ -69,7 +69,7 @@ class PacienteController extends Controller
                 'paciente.fecha_creacion as fechaExpediente',
             )->get();
         }
-        Log::warning(json_encode(DB::getQueryLog()));
+        
         return json_encode($pacientes);
     }
 
