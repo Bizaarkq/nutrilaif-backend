@@ -176,6 +176,7 @@ class ConsultaController extends Controller
 
     public function guardarConsulta(Request $cuerpo, $id = null){
         try {
+        $tipoConsulta=Respuesta::mensaje_exito_generico_consulta;
         $datosConsulta = $cuerpo->post();
         $subConsulta = $datosConsulta['subconsulta_form'];
         $id_paciente = array_key_exists('id_paciente', $datosConsulta['paciente']) ? $datosConsulta['paciente']['id_paciente'] : null;
@@ -240,6 +241,7 @@ class ConsultaController extends Controller
             $consulta->id_nutric = $id_nutricionista;
             $consulta->created_user = $user;
             $consulta->es_subsecuente = 0;
+            $tipoConsulta=Respuesta::mensaje_exito_generico_consulta_inicial;
         } elseif ($id==null && $id_paciente!=null) {
             //en caso exista el paciente pero sea una nueva consulta subsecuente
             $consulta = new Consulta;
@@ -252,6 +254,7 @@ class ConsultaController extends Controller
             //en caso exista la consulta y el paciente sería una edicion de consulta
             $consulta = Consulta::find($id);
             $consulta->dieta = $datosConsulta['dieta'];
+            $tipoConsulta=Respuesta::act_consulta;
         }
         $consulta->recordatorio = json_encode($datosConsulta['recordatorio']);
         $consulta->frecuencia_consumo = json_encode($datosConsulta['frecuencia_consumo']);
@@ -274,7 +277,7 @@ class ConsultaController extends Controller
         return response()->json([
             'code'=>200,
             'titulo'=>Respuesta::titulo_exito_generico,
-            'mensaje'=>Respuesta::mensaje_exito_generico_consulta,
+            'mensaje'=>$tipoConsulta,
             'data' => $numero_expediente
         ]);
     }catch(\Exception $e){
