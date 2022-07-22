@@ -9,10 +9,11 @@ class Respuesta
     //Creaciones correctas
     const mensaje_exito_generico_alimentos='El alimento se guardó con éxito';
     const mensaje_exito_generico_consulta='La consulta se guardó de manera correcta';
+    const mensaje_exito_generico_consulta_inicial='La consulta incial se guardó de manera correcta junto al expediente';
     const mensaje_exito_generico_expediente='El expediente se creó de correctamente';
     //Edición correcta
     const act_alimentos='El alimento se modificó correctamente';
-    const act_consulta='La consulta se modificó correctamente';
+    const act_consulta='La consulta y dieta se actualizaron correctamente';
     const act_expediente='El expediente se modificó correctamente';
     //Eliminación correcta
     const borrado_alimentos='El alimento fue eliminado';
