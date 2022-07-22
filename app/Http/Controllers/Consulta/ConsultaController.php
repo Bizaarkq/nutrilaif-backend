@@ -184,7 +184,7 @@ class ConsultaController extends Controller
         $user = Auth::user()->USERNAME;
         $numero_expediente = null;
         DB::beginTransaction();
-        DB::enableQueryLog();
+
         $id_nutricionista =  Auth::user()->ID;
         if ($id==null && $id_paciente == null) {
             // si no existe la consulta y el paciente se crea uno nuevo
@@ -255,6 +255,7 @@ class ConsultaController extends Controller
             $consulta = Consulta::find($id);
             $consulta->dieta = $datosConsulta['dieta'];
             $tipoConsulta=Respuesta::act_consulta;
+            $consulta->planificacion_dieta = $datosConsulta['planificacion_dieta'];
         }
         $consulta->recordatorio = json_encode($datosConsulta['recordatorio']);
         $consulta->frecuencia_consumo = json_encode($datosConsulta['frecuencia_consumo']);
@@ -300,6 +301,7 @@ class ConsultaController extends Controller
                 'fecha_dieta', 
                 'recordatorio', 
                 'frecuencia_consumo',
+                'planificacion_dieta',
                 'dieta', 
                 'es_borrador',
                 'es_subsecuente'
@@ -307,13 +309,12 @@ class ConsultaController extends Controller
             $historiaDietetica = $consulta->historiaDietetica->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-            $planificacionDieta = optional($consulta->planificacionDieta)->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             
             $formulario = [
             'recordatorio' => json_decode($consulta->recordatorio,true),
             'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
-            'planificacion_dieta' => $planificacionDieta,
+            'planificacion_dieta' => json_decode($consulta->planificacion_dieta,true),
             'dieta' => json_decode($consulta->dieta,true),
             'subconsulta_form' => [
                 'historia_dietetica' => $historiaDietetica,
