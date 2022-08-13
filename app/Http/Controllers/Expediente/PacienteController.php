@@ -21,7 +21,6 @@ class PacienteController extends Controller
     public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
-        
         $nutri=Auth::user()->ID;
         $query = DB::table('nutricionista_paciente')
         ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
@@ -51,7 +50,11 @@ class PacienteController extends Controller
                     ->get();
                 }
             }
-            $pacientes = $query->select(
+            $pacientes = $query
+            ->join('nutri_catalog.municipios as munic', 'munic.id', 'paciente.municipio')
+            ->join('nutri_catalog.departamentos as dep', 'dep.id', 'munic.id_departamento')
+            ->join('nutri_catalog.pais as pais', 'pais.codigo', 'dep.cod_pais')
+            ->select(
                 'paciente.id',
                 'paciente.numero_exp',
                 DB::raw("CONCAT(paciente.nombre, ' ', paciente.apellido) AS nombre_completo"),
@@ -62,8 +65,10 @@ class PacienteController extends Controller
                 'paciente.sexo',
                 'paciente.telefono',
                 'paciente.direccion',
+                'munic.id as municipio',
+                'dep.id as departamento',
+                'pais.codigo as pais',
                 'paciente.ocupacion',
-                'paciente.departamento',
                 'paciente.municipio',
                 'paciente.edad',
                 'paciente.fecha_creacion as fechaExpediente',
@@ -100,6 +105,7 @@ class PacienteController extends Controller
             $paciente->apellido = $request->apellidos;
             $paciente->correo = $request->correo;
             $paciente->direccion = $request->direccion;
+            $paciente->municipio = $request->municipio;
             $paciente->fecha_nacimiento=$request->fecha_nacimiento;
             $paciente->numero_exp = $request->numero_exp;
             $paciente->sexo = $request->sexo;

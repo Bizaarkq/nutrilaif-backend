@@ -220,7 +220,6 @@ class ConsultaController extends Controller
             $paciente->correo = $datosConsulta['paciente']['correo'];
             $paciente->telefono = $datosConsulta['paciente']['telefono'];
             $paciente->direccion = $datosConsulta['paciente']['direccion'];
-            $paciente->departamento = $datosConsulta['paciente']['departamento'];
             $paciente->municipio = $datosConsulta['paciente']['municipio'];
             $paciente->edad = $datosConsulta['paciente']['edad'];
             $paciente->ocupacion = $datosConsulta['paciente']['ocupacion'];
