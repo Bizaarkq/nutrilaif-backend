@@ -22,5 +22,10 @@ class CatalogController extends Controller
     public function getMunicipios($id){
         return Departamento::find($id)->municipios;
     }
+    public function getFrecuenciaBase(){
+        $listaBase=DB::table('nutri_catalog.alimentos_frecuencia_base')
+        ->select('nombre')->orderBy('id','asc')->get();
+        return $listaBase;
+    }
 
 }
