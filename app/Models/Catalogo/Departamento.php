@@ -16,6 +16,6 @@ class Departamento extends Model
 
     public function municipios()
     {
-        return $this->hasMany(Municipio::class, 'id_departamento');
+        return $this->hasMany(Municipio::class, 'id_departamento')->orderBy('nombre', 'asc');
     }
 }

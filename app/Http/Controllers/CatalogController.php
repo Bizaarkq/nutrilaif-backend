@@ -16,7 +16,10 @@ class CatalogController extends Controller
     }
 
     public function getDepartamentos($codigo){
-        return Departamento::where('cod_pais', $codigo)->select('id', 'nombre', 'cod_departamento')->get();
+        return Departamento::where('cod_pais', $codigo)
+        ->select('id', 'nombre', 'cod_departamento')
+        ->orderBy('nombre', 'asc')
+        ->get();
     }
 
     public function getMunicipios($id){
@@ -31,7 +34,9 @@ class CatalogController extends Controller
     
     public function getPaises(){
         $listaPaises=DB::table('nutri_catalog.pais')
-        ->select('codigo', 'nombre')->get();
+        ->select('codigo', 'nombre')
+        ->orderBy('nombre', 'asc')
+        ->get();
         return $listaPaises;
     }
 
