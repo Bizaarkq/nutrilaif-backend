@@ -302,14 +302,16 @@ class ConsultaController extends Controller
                 'frecuencia_consumo',
                 'planificacion_dieta',
                 'dieta', 
+                'estado',
                 'es_borrador',
                 'es_subsecuente'
-            )->first();
+            )
+            ->first();
             $historiaDietetica = $consulta->historiaDietetica->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-            
+
             $formulario = [
             'recordatorio' => json_decode($consulta->recordatorio,true),
             'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
@@ -322,6 +324,7 @@ class ConsultaController extends Controller
                 'examen_labs' => $examenLabs
             ],
             "es_borrador" => $consulta->es_borrador == 1 ? true : false,
+            "estado" => $consulta->estado,
             "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,
         ];
             return $formulario;
