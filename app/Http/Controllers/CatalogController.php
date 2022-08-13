@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Catalogo\MenuInicio;
-use Arcanedev\LogViewer\Entities\Log as EntitiesLog;
 
 class CatalogController extends Controller
 {
@@ -26,7 +25,6 @@ class CatalogController extends Controller
     public function getFrecuenciaBase(){
         $listaBase=DB::table('nutri_catalog.alimentos_frecuencia_base')
         ->select('nombre')->orderBy('id','asc')->get();
-        Log::warning(gettype($listaBase));
         return $listaBase;
     }
 
