@@ -15,12 +15,29 @@ class CatalogController extends Controller
         return MenuInicio::all();
     }
 
-    public function getDepartamentos(){
-        return Departamento::all();
+    public function getDepartamentos($codigo){
+        return Departamento::where('cod_pais', $codigo)
+        ->select('id', 'nombre', 'cod_departamento')
+        ->orderBy('nombre', 'asc')
+        ->get();
     }
 
     public function getMunicipios($id){
         return Departamento::find($id)->municipios;
+    }
+
+    public function getFrecuenciaBase(){
+        $listaBase=DB::table('nutri_catalog.alimentos_frecuencia_base')
+        ->select('nombre')->orderBy('id','asc')->get();
+        return $listaBase;
+    }
+    
+    public function getPaises(){
+        $listaPaises=DB::table('nutri_catalog.pais')
+        ->select('codigo', 'nombre')
+        ->orderBy('nombre', 'asc')
+        ->get();
+        return $listaPaises;
     }
 
 }

@@ -23,10 +23,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/alimento/delete', 'App\Http\Controllers\AlimentoController@destroy')->name('eliminar-alimento');
 
         Route::get('/menu', 'App\Http\Controllers\CatalogController@getMenu')->name('obtener-menu');
-        Route::get('/departamentos', 'App\Http\Controllers\CatalogController@getDepartamentos')->name('obtener-departamentos');
+        Route::get('/paises', 'App\Http\Controllers\CatalogController@getPaises')->name('obtener-paises');
+        Route::get('/departamentos/{codigo}', 'App\Http\Controllers\CatalogController@getDepartamentos')->name('obtener-departamentos');
         Route::get('/municipios/{id}', 'App\Http\Controllers\CatalogController@getMunicipios')->name('obtener-municipios');
+        Route::get('/listaBase','App\Http\Controllers\CatalogController@getFrecuenciaBase')->name('lista-base');
     });
-
+    
     Route::prefix('consulta')->group(function(){
         Route::post('/save/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@guardarConsulta')->name('guardar-consulta');
         Route::post('/update/{id}', 'App\Http\Controllers\Consulta\ConsultaController@editarConsulta')->name('editar-consulta');
