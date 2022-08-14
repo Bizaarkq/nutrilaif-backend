@@ -303,7 +303,6 @@ class ConsultaController extends Controller
                 'planificacion_dieta',
                 'dieta', 
                 'estado',
-                'es_borrador',
                 'es_subsecuente'
             )
             ->first();
