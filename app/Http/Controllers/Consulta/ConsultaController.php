@@ -24,7 +24,7 @@ class ConsultaController extends Controller
     {
         $nutri=Auth::user()->ID;
         if($llave==null){
-            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.es_borrador')
+            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.estado')
             ->where('id_nutric','=',$nutri)
             ->join('paciente', 'paciente.id', '=', 'consulta.id_paciente')
             ->where('paciente.deleted_at', '=', null)
@@ -32,7 +32,7 @@ class ConsultaController extends Controller
             ->get();
         }
         else{
-            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.es_borrador')
+            $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.estado')
             ->where([['id_nutric','=',$nutri],['id_paciente','=',$llave],])
             ->join('paciente', 'paciente.id', '=', 'consulta.id_paciente')
             ->where('paciente.deleted_at', '=', null)
@@ -258,7 +258,6 @@ class ConsultaController extends Controller
         }
         $consulta->recordatorio = json_encode($datosConsulta['recordatorio']);
         $consulta->frecuencia_consumo = json_encode($datosConsulta['frecuencia_consumo']);
-        $consulta->es_borrador = $datosConsulta['es_borrador'];
         $consulta->estado = $datosConsulta['estado'];
         $consulta->updated_user = $user;
         $consulta->save();
@@ -324,7 +323,6 @@ class ConsultaController extends Controller
                 'datos_medicos' => $datosMedicos,
                 'examen_labs' => $examenLabs
             ],
-            "es_borrador" => $consulta->es_borrador == 1 ? true : false,
             "estado" => $consulta->estado,
             "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,
         ];
