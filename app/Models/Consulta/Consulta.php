@@ -20,8 +20,7 @@ class Consulta extends Model
     protected $fillable = [
         'fecha_dieta',
         'recordatorio',
-        'frecuencia_consumo',
-        'es_borrador'
+        'frecuencia_consumo'
     ];
     protected $dates=['created_at', 'updated_at', 'deleted_at'];
     public function historiaDietetica(){
