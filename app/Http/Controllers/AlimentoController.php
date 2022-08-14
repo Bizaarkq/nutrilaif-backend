@@ -20,14 +20,12 @@ class AlimentoController extends Controller
 
     public function listarAlimentos($llave=null)
     {
-
-        $query = DB::table('pais')
-        ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
-
         if ($llave==null) {
+            $alimentoQuery = DB::table('alimentos')
+            ->join('pais','pais.codigo','alimentos.cod_pais')
             $alimentoQuery=Alimento::select(
                 'id', 
-                'pais.codigo' as 'pais',
+                'pais.cod_pais'
                 'codigo', 
                 'nombre', 
                 'calorias', 
@@ -39,12 +37,9 @@ class AlimentoController extends Controller
                 'proteinas', 
                 'sodio')
                 ->get();
-
-            $alimentoQuery=$query
         } else {
             $alimentoQuery=Alimento::select(
                 'id', 
-                'cod_pais',
                 'codigo', 
                 'nombre', 
                 'calorias', 
@@ -88,7 +83,6 @@ class AlimentoController extends Controller
             $user = Auth::user()->USERNAME;
 
             $alimento= new Alimento;
-            $alimento->cod_pais=$request->cod_pais;
             $alimento->nombre=$request->nombre;
             $alimento->codigo=$request->codigo;
             $alimento->calorias=$request->calorias;
