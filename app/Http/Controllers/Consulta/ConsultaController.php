@@ -259,6 +259,7 @@ class ConsultaController extends Controller
         $consulta->recordatorio = json_encode($datosConsulta['recordatorio']);
         $consulta->frecuencia_consumo = json_encode($datosConsulta['frecuencia_consumo']);
         $consulta->es_borrador = $datosConsulta['es_borrador'];
+        $consulta->estado = $datosConsulta['estado'];
         $consulta->updated_user = $user;
         $consulta->save();
 
