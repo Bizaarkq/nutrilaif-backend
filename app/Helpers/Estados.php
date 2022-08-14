@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Helpers;
+
+class Estados
+{
+    const BORRADOR_CONSULTA = 'BORRADOR.CONSULTA';
+    const BORRADOR_POST_CONSULTA = 'BORRADOR.POST.CONSULTA';
+    const CONSULTA_FINALIZADA = 'CONSULTA.FINALIZADA';
+    const ARCHIVADA = 'ARCHIVADA';
+}

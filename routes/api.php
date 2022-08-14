@@ -26,7 +26,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/paises', 'App\Http\Controllers\CatalogController@getPaises')->name('obtener-paises');
         Route::get('/departamentos/{codigo}', 'App\Http\Controllers\CatalogController@getDepartamentos')->name('obtener-departamentos');
         Route::get('/municipios/{id}', 'App\Http\Controllers\CatalogController@getMunicipios')->name('obtener-municipios');
+        
         Route::get('/listaBase','App\Http\Controllers\CatalogController@getFrecuenciaBase')->name('lista-base');
+        Route::get('/estados/{estadoActual?}', 'App\Http\Controllers\CatalogController@getEstadosByEstadoActual')->name('obtener-estados');
     });
     
     Route::prefix('consulta')->group(function(){
