@@ -21,36 +21,36 @@ class AlimentoController extends Controller
     public function listarAlimentos($llave=null)
     {
         if ($llave==null) {
-            $alimentoQuery = DB::table('alimentos')
-            ->join('pais','pais.codigo','alimentos.cod_pais')
             $alimentoQuery=Alimento::select(
-                'id', 
-                'pais.cod_pais'
-                'codigo', 
-                'nombre', 
-                'calorias', 
-                'calcio', 
-                'carbohidratos', 
-                'grasas', 
-                'hierro', 
-                'potasio', 
-                'proteinas', 
-                'sodio')
+                'alimentos.id', 
+                'pais.codigo as cod_pais',
+                'alimentos.codigo', 
+                'alimentos.nombre', 
+                'alimentos.calorias', 
+                'alimentos.calcio', 
+                'alimentos.carbohidratos', 
+                'alimentos.grasas', 
+                'alimentos.hierro', 
+                'alimentos.potasio', 
+                'alimentos.proteinas', 
+                'alimentos.sodio')
+                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
                 ->get();
         } else {
             $alimentoQuery=Alimento::select(
-                'id', 
-                'codigo', 
-                'nombre', 
-                'calorias', 
-                'calcio', 
-                'carbohidratos', 
-                'grasas', 
-                'hierro', 
-                'potasio', 
-                'proteinas', 
-                'sodio'
-                )
+                'alimentos.id', 
+                'pais.codigo as cod_pais',
+                'alimentos.codigo', 
+                'alimentos.nombre', 
+                'alimentos.calorias', 
+                'alimentos.calcio', 
+                'alimentos.carbohidratos', 
+                'alimentos.grasas', 
+                'alimentos.hierro', 
+                'alimentos.potasio', 
+                'alimentos.proteinas', 
+                'alimentos.sodio')
+                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
                 ->where('nombre', 'like', '%'.$llave.'%')
                 ->latest()
                 ->take(15)
@@ -85,6 +85,7 @@ class AlimentoController extends Controller
             $alimento= new Alimento;
             $alimento->nombre=$request->nombre;
             $alimento->codigo=$request->codigo;
+            $alimento->cod_pais=$request->cod_pais;
             $alimento->calorias=$request->calorias;
             $alimento->grasas=$request->grasas;
             $alimento->proteinas=$request->proteinas;

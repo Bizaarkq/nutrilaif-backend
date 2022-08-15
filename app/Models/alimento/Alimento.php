@@ -11,7 +11,6 @@ class Alimento extends Model
     use HasFactory, SoftDeletes;
     protected $table='nutri_catalog.alimentos';
     protected $fillable=[
-        'cod_pais',
         'nombre',
         'calorias',
         'grasas',
@@ -25,12 +24,5 @@ class Alimento extends Model
     protected $dates=['created_at','updated_at'];
     public function dieta_A(){
         return $this->hasMany(Dieta_Alimento::class);
-    }
-
-    //public function alimento_pais(){
-   //     return $this->hasMany(Pais::class); //? belongTo
-   // }
-    {
-        # code...
     }
 }
