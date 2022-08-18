@@ -169,21 +169,23 @@ class PacienteController extends Controller
     public function updatePaciente(Request $request)
     {
         $paciente = $request->post();
+        Log::warning($paciente);
         try {
             DB::beginTransaction();
-            Paciente::where('id', '=', $paciente['id'])->update($paciente);
-
-            /*$paciente = new Paciente;
-            $paciente->nombre = $request->nombre;
-            $paciente->apellido = $request->apellidos;
-            $paciente->correo = $request->correo;
-            $paciente->direccion = $request->direccion;
-            $paciente->municipio = $request->municipio;
-            $paciente->fecha_nacimiento=$request->fecha_nacimiento;
-            $paciente->sexo = $request->sexo;
-            $paciente->telefono = $request->telefono;
-            $paciente->save();*/
-
+            Paciente::where('numero_exp', '=', $paciente['numero_exp'])->update(
+                [
+                    'telefono' => $paciente['telefono'],
+                    'nombre' => $paciente['nombre'],
+                    'apellido' => $paciente['apellido'],
+                    'direccion' => $paciente['direccion'],
+                    'fecha_nacimiento' => $paciente['fecha_nacimiento'],
+                    'sexo' => $paciente['sexo'],
+                    'correo' => $paciente['correo'],
+                    'municipio' => $paciente['municipio'],
+                    'edad' => $paciente['edad'],
+                    'ocupacion' => $paciente['ocupacion'],
+                ]
+            );
             DB::commit();
             
             return response()->json([
