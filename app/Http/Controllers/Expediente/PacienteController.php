@@ -94,30 +94,31 @@ class PacienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$id)
     {
+        $paciente = Paciente::find($id);
         try {
+            $cualquiera=$request->post();
             DB::beginTransaction();
+            $user = Auth::user()->USERNAME;
 
             $paciente = new Paciente;
-            $paciente->id = Ulid::generate(true);
             $paciente->nombre = $request->nombre;
             $paciente->apellido = $request->apellidos;
             $paciente->correo = $request->correo;
             $paciente->direccion = $request->direccion;
             $paciente->municipio = $request->municipio;
             $paciente->fecha_nacimiento=$request->fecha_nacimiento;
-            $paciente->numero_exp = $request->numero_exp;
             $paciente->sexo = $request->sexo;
             $paciente->telefono = $request->telefono;
-            $paciente->save();
+            $paciente->update();
 
             DB::commit();
             
             return response()->json([
                 'code' => 200,
                 'titulo' => Respuesta::titulo_exito_generico,
-                'mensaje' => Respuesta::mensaje_exito_generico_expediente
+                'mensaje' => Respuesta::act_expediente
             ]);
         } catch (\Exception $e) {
             report($e);
@@ -141,6 +142,11 @@ class PacienteController extends Controller
         //
     }
 
+    public function edit(Paciente $paciente)
+    {       
+        return $paciente;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -155,10 +161,59 @@ class PacienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+
+    public function getPaciente(){
+
     }
+
+    public function updatePaciente(Request $request)
+    {
+        $paciente = $request->post();
+        try {
+            DB::beginTransaction();
+            Paciente::where('id', '=', $paciente['id'])->update($paciente);
+
+            /*$paciente = new Paciente;
+            $paciente->nombre = $request->nombre;
+            $paciente->apellido = $request->apellidos;
+            $paciente->correo = $request->correo;
+            $paciente->direccion = $request->direccion;
+            $paciente->municipio = $request->municipio;
+            $paciente->fecha_nacimiento=$request->fecha_nacimiento;
+            $paciente->sexo = $request->sexo;
+            $paciente->telefono = $request->telefono;
+            $paciente->save();*/
+
+            DB::commit();
+            
+            return response()->json([
+                'code' => 200,
+                'titulo' => Respuesta::act_expediente,
+                'mensaje' => Respuesta::act_expediente
+            ]);
+        } catch (\Exception $e) {
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code' => 99,
+                'titulo' => Respuesta::error_act_expediente,
+                'mensaje' => Respuesta::mensaje_error_expediente
+            ]);
+        }
+
+        /*$paciente = Paciente::find($id);
+        $paciente->nombre = $request->nombre;
+        $paciente->apellido = $request->apellidos;
+        $paciente->correo = $request->correo;
+        $paciente->direccion = $request->direccion;
+        $paciente->municipio = $request->municipio;
+        $paciente->fecha_nacimiento=$request->fecha_nacimiento;
+        $paciente->sexo = $request->sexo;
+        $paciente->telefono = $request->telefono;
+        $paciente->ocupacion = $request->ocupacion;
+        $paciente->update();*/
+    }
+
 
     /**
      * Remove the specified resource from storage.
