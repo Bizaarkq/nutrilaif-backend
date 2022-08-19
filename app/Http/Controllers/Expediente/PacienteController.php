@@ -162,10 +162,6 @@ class PacienteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getPaciente(){
-
-    }
-
     public function updatePaciente(Request $request)
     {
         $paciente = $request->post();
@@ -199,23 +195,10 @@ class PacienteController extends Controller
             return response()->json([
                 'code' => 99,
                 'titulo' => Respuesta::error_act_expediente,
-                'mensaje' => Respuesta::mensaje_error_expediente
+                'mensaje' => Respuesta::error_act_expediente
             ]);
         }
-
-        /*$paciente = Paciente::find($id);
-        $paciente->nombre = $request->nombre;
-        $paciente->apellido = $request->apellidos;
-        $paciente->correo = $request->correo;
-        $paciente->direccion = $request->direccion;
-        $paciente->municipio = $request->municipio;
-        $paciente->fecha_nacimiento=$request->fecha_nacimiento;
-        $paciente->sexo = $request->sexo;
-        $paciente->telefono = $request->telefono;
-        $paciente->ocupacion = $request->ocupacion;
-        $paciente->update();*/
     }
-
 
     /**
      * Remove the specified resource from storage.
