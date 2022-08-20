@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ulid\Ulid;
 use App\Models\Expediente\Paciente;
+use Arcanedev\LogViewer\Entities\Log as EntitiesLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log as FacadesLog;
 use Log;
 
 class ConsultaController extends Controller
@@ -310,12 +312,12 @@ class ConsultaController extends Controller
             $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-
+            $ultimaDieta=Consulta::where('id_paciente',$consulta->id_paciente)->where('dieta','!=','[]')->whereJsonLength('dieta','>',0)->select('dieta')->orderBy('created_at','desc')->first();
             $formulario = [
             'recordatorio' => json_decode($consulta->recordatorio,true),
             'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
             'planificacion_dieta' => json_decode($consulta->planificacion_dieta,true),
-            'dieta' => json_decode($consulta->dieta,true),
+            'dieta' => json_decode($ultimaDieta->dieta,true),
             'subconsulta_form' => [
                 'historia_dietetica' => $historiaDietetica,
                 'datos_antropo' => $datosAntropo,
