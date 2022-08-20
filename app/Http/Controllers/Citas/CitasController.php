@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Respuesta;
 use Log;
-
+use Carbon\Carbon;
 
 class CitasController extends Controller
 {
@@ -44,12 +44,13 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
-            $nutricionista = Auth::user();
+            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
 
-            if($this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista->ID)){
+            $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista);
+            if(!(array)$disponibilidad){
                 DB::beginTransaction();
                 $cita = new Cita();
-                $cita->id_nutric = $nutricionista->ID;
+                $cita->id_nutric = $nutricionista;
                 $cita->titulo = $citaRequest['titulo'];
                 $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
                 $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
@@ -66,15 +67,23 @@ class CitasController extends Controller
                     $cita->id_paciente = $citaRequest['id_paciente'];
                 }
 
-                $cita->created_user = $nutricionista->USERNAME;
-                $cita->updated_user = $nutricionista->USERNAME;
+                $nutri = Auth::user()->USERNAME;
+
+                $cita->created_user = $nutri;
+                $cita->updated_user = $nutri;
                 $cita->save();
                 DB::commit();
             }else{
+                $fecha = Carbon::parse(explode(" ",$disponibilidad->fecha_cita_inicio)[0]);
+                $message = Respuesta::mensaje_cita_horario_no_disponible . 
+                ': ' . ($citaRequest['id_nutric'] ? 'el nutricionista seleccionado tiene' : 'ya existe') . ' una cita para el día ' .
+                $fecha->dayName . ', ' . $fecha->day . ' de ' . $fecha->monthName . ' de ' . $fecha->year .
+                ' a las ' . substr(explode(" ", $disponibilidad->fecha_cita_inicio)[1],0,5) 
+                . ' - ' . substr(explode(" ", $disponibilidad->fecha_cita_fin)[1],0,5);
                 return response()->json([
                     'code'=> 99,
                     'titulo'=>Respuesta::mensaje_cita_horario_no_disponible,
-                    'mensaje'=>Respuesta::mensaje_cita_horario_no_disponible
+                    'mensaje'=> $message
                 ]);
             }
             
@@ -185,18 +194,23 @@ class CitasController extends Controller
 
 
     public function consultarDisponibilidad($fechaInicio, $fechaFin, $nutricionista){
-        $citas = Cita::where('id_nutric', $nutricionista)
-            ->where('fecha_cita_inicio', '<=', $fechaInicio)
-            ->where('fecha_cita_fin', '>=', $fechaFin)
-            ->orWhere(function ($query) use ($fechaInicio) {
+        $citas = Cita::where(function($query) use ($fechaInicio, $fechaFin, $nutricionista){
+                $query->where('fecha_cita_inicio', '>=', $fechaInicio)
+                    ->where('fecha_cita_inicio', '<=', $fechaFin)
+                    ->where('id_nutric', $nutricionista);
+            })
+            ->orWhere(function ($query) use ($fechaInicio, $nutricionista) {
                 $query->where('fecha_cita_inicio', '<=', $fechaInicio)
-                    ->where('fecha_cita_fin', '>=', $fechaInicio);
+                    ->where('fecha_cita_fin', '>=', $fechaInicio)
+                    ->where('id_nutric', $nutricionista);
             })
-            ->orWhere(function ($query) use ($fechaFin) {
+            ->orWhere(function ($query) use ($fechaFin, $nutricionista) {
                 $query->where('fecha_cita_inicio', '<=', $fechaFin)
-                    ->where('fecha_cita_fin', '>=', $fechaFin);
+                    ->where('fecha_cita_fin', '>=', $fechaFin)
+                    ->where('id_nutric', $nutricionista);
             })
-            ->count();
-        return !($citas > 0);
+            ->orderBy('created_at', 'desc')
+            ->first();
+        return $citas;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Catalogo\Departamento;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Catalogo\MenuInicio;
@@ -69,6 +70,7 @@ class CatalogController extends Controller
         $listaNutricionistas = DB::table('nutricionista')
         ->select('id', 'nombres', 'apellidos')
         ->where('deleted_at', null)
+        ->where('id', '!=' ,Auth::user()->ID)
         ->orderBy('nombres', 'asc')
         ->get();
         return $listaNutricionistas;
