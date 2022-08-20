@@ -65,4 +65,13 @@ class CatalogController extends Controller
         return $listadoEstados;
     }
 
+    public function getNutricionistas(){
+        $listaNutricionistas = DB::table('nutricionista')
+        ->select('id', 'nombres', 'apellidos')
+        ->where('deleted_at', null)
+        ->orderBy('nombres', 'asc')
+        ->get();
+        return $listaNutricionistas;
+    }
+
 }

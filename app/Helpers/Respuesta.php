@@ -34,4 +34,13 @@ class Respuesta
     const error_baja_expediente='El expediente no se pudo dar de baja';
     //Obtención incorrecta
     const error_obt_consulta='La consulta no pudo ser cargada';
+
+    //Citas
+    const mensaje_exito_guardar_cita='La cita se guardó de manera correcta';
+    const mensaje_error_guardar_cita='La cita no se pudo guardar';
+    const mensaje_exito_actualizar_cita='La cita se actualizó de manera correcta';
+    const mensaje_error_actualizar_cita='La cita no se pudo actualizar';
+    const mensaje_exito_eliminar_cita='La cita se eliminó de manera correcta';
+    const mensaje_error_eliminar_cita='La cita no se pudo eliminar';
+    const mensaje_cita_horario_no_disponible='El horario seleccionado no está disponible';
 }

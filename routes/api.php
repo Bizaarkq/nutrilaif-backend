@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         
         Route::get('/listaBase','App\Http\Controllers\CatalogController@getFrecuenciaBase')->name('lista-base');
         Route::get('/estados/{estadoActual?}', 'App\Http\Controllers\CatalogController@getEstadosByEstadoActual')->name('obtener-estados');
+
+        Route::get('/nutricionistas', 'App\Http\Controllers\CatalogController@getNutricionistas')->name('obtener-nutricionistas');
     });
     
     Route::prefix('consulta')->group(function(){
@@ -45,5 +47,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/delete','App\Http\Controllers\AlimentoController@update')->name('eliminar-alimento');
         });
         
+    Route::prefix('cita')->group(function(){
+        Route::get('/list/{id?}', 'App\Http\Controllers\Citas\CitasController@index')->name('listar-citas');
+        Route::post('/save', 'App\Http\Controllers\Citas\CitasController@store')->name('guardar-cita');
+    });
 
 });
