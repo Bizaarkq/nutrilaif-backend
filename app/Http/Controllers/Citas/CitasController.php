@@ -45,11 +45,10 @@ class CitasController extends Controller
             
             $citaRequest = $request->post();
             $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
-
-            $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista);
+            $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista, $citaRequest['id']);
             if(!(array)$disponibilidad){
                 DB::beginTransaction();
-                $cita = new Cita();
+                $cita = $citaRequest['id'] ? Cita::find($citaRequest['id']) : new Cita();
                 $cita->id_nutric = $nutricionista;
                 $cita->titulo = $citaRequest['titulo'];
                 $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
@@ -69,7 +68,7 @@ class CitasController extends Controller
 
                 $nutri = Auth::user()->USERNAME;
 
-                $cita->created_user = $nutri;
+                if(!$citaRequest['id']) $cita->created_user = $nutri;
                 $cita->updated_user = $nutri;
                 $cita->save();
                 DB::commit();
@@ -133,50 +132,32 @@ class CitasController extends Controller
      * @param  \App\Models\Citas\Cita  $cita
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cita $cita)
+    public function updateFechaHora(Request $request)
     {
         try{
-            DB::beginTransaction();
-
+            
             $citaRequest = $request->post();
-            $nutricionista = Auth::user();
-
+            
+            DB::beginTransaction();
             $cita = Cita::find($citaRequest['id']);
-            $cita->id_nutric = $nutricionista->ID;
-            $cita->titulo = $citaRequest['titulo'];
             $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
             $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
-
-            if( $citaRequest['id_paciente'] == null ){
-                $cita->nombre = $citaRequest['nombre'];
-                $cita->telefono = $citaRequest['telefono'];
-                $cita->correo = $citaRequest['correo'];
-                $cita->direccion = $citaRequest['direccion'];
-                $cita->edad = $citaRequest['edad'];
-                $cita->fecha_nacimiento = substr($citaRequest['fecha_nacimiento'], 0, 10);
-                $cita->objetivo = $citaRequest['objetivo'];
-            }else{
-                $cita->id_paciente = $citaRequest['id_paciente'];
-            }
-            
-            $cita->created_user = $nutricionista->USERNAME;
-            $cita->updated_user = $nutricionista->USERNAME;
+            $cita->updated_user = Auth::user()->USERNAME;
             $cita->save();
-
-
             DB::commit();
+            
             return response()->json([
                 'code'=>200,
-                'titulo'=>Respuesta::mensaje_exito_guardar_cita,
-                'mensaje'=>Respuesta::mensaje_exito_guardar_cita
+                'titulo'=>Respuesta::mensaje_exito_actualizar_cita,
+                'mensaje'=>Respuesta::mensaje_exito_actualizar_cita
             ]);
         }catch(\Exception $e){  
             report($e);
             DB::rollBack();
             return response()->json([
                 'code'=>99,
-                'titulo'=>Respuesta::mensaje_error_guardar_cita,
-                'mensaje'=>Respuesta::mensaje_error_guardar_cita
+                'titulo'=>Respuesta::mensaje_error_actualizar_cita,
+                'mensaje'=>Respuesta::mensaje_error_actualizar_cita
             ]);
         }
     }
@@ -187,13 +168,31 @@ class CitasController extends Controller
      * @param  \App\Models\Citas\Cita  $cita
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cita $cita)
+    public function delete($id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $cita = Cita::find($id);
+            $cita->delete();
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::mensaje_exito_eliminar_cita,
+                'mensaje'=>Respuesta::mensaje_exito_eliminar_cita
+            ]);
+        }catch(\Exception $e){  
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::mensaje_error_eliminar_cita,
+                'mensaje'=>Respuesta::mensaje_error_eliminar_cita
+            ]);
+        }
     }
 
 
-    public function consultarDisponibilidad($fechaInicio, $fechaFin, $nutricionista){
+    public function consultarDisponibilidad($fechaInicio, $fechaFin, $nutricionista, $id=null){
         $citas = Cita::where(function($query) use ($fechaInicio, $fechaFin, $nutricionista){
                 $query->where('fecha_cita_inicio', '>=', $fechaInicio)
                     ->where('fecha_cita_inicio', '<=', $fechaFin)
@@ -209,8 +208,12 @@ class CitasController extends Controller
                     ->where('fecha_cita_fin', '>=', $fechaFin)
                     ->where('id_nutric', $nutricionista);
             })
-            ->orderBy('created_at', 'desc')
-            ->first();
-        return $citas;
+            ->orderBy('created_at', 'desc');
+
+        if($id){
+            $citas = $citas->where('id', '!=', $id);
+        }
+
+        return $citas->first();
     }
 }
