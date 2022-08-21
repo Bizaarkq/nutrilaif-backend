@@ -94,7 +94,7 @@ class PacienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$id)
+    public function store(Request $request)
     {
         $paciente = Paciente::find($id);
         try {
@@ -111,14 +111,14 @@ class PacienteController extends Controller
             $paciente->fecha_nacimiento=$request->fecha_nacimiento;
             $paciente->sexo = $request->sexo;
             $paciente->telefono = $request->telefono;
-            $paciente->update();
+            $paciente->save();
 
             DB::commit();
             
             return response()->json([
                 'code' => 200,
                 'titulo' => Respuesta::titulo_exito_generico,
-                'mensaje' => Respuesta::act_expediente
+                'mensaje' => Respuesta::mensaje_exito_generico_expediente
             ]);
         } catch (\Exception $e) {
             report($e);
@@ -140,11 +140,6 @@ class PacienteController extends Controller
     public function show($id)
     {
         //
-    }
-
-    public function edit(Paciente $paciente)
-    {       
-        return $paciente;
     }
 
     /**

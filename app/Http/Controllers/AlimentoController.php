@@ -102,7 +102,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::act_expediente
+                'mensaje'=>Respuesta::mensaje_exito_generico_alimentos
             ]);
         }catch(\Exception $e){
             report($e);
@@ -110,7 +110,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::error_act_expediente
+                'mensaje'=>Respuesta::mensaje_error_alimentos
             ]);
         }
     }
