@@ -137,20 +137,38 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
+
+            $disponibilidad = $citaRequest['id_nutric'] ? $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'],$citaRequest['id_nutric']) : null;    
             
-            DB::beginTransaction();
-            $cita = Cita::find($citaRequest['id']);
-            $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
-            $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
-            $cita->updated_user = Auth::user()->USERNAME;
-            $cita->save();
-            DB::commit();
+            if(!(array)$disponibilidad){
+
+                DB::beginTransaction();
+                $cita = Cita::find($citaRequest['id']);
+                $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
+                $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
+                $cita->updated_user = Auth::user()->USERNAME;
+                $cita->save();
+                DB::commit();
+                
+                return response()->json([
+                    'code'=>200,
+                    'titulo'=>Respuesta::mensaje_exito_actualizar_cita,
+                    'mensaje'=>Respuesta::mensaje_exito_actualizar_cita
+                ]);
+            }else{
+                $fecha = Carbon::parse(explode(" ",$disponibilidad->fecha_cita_inicio)[0]);
+                $message = Respuesta::mensaje_cita_horario_no_disponible . 
+                ': ' . ($citaRequest['id_nutric'] ? 'el nutricionista seleccionado tiene' : 'ya existe') . ' una cita para el día ' .
+                $fecha->dayName . ', ' . $fecha->day . ' de ' . $fecha->monthName . ' de ' . $fecha->year .
+                ' a las ' . substr(explode(" ", $disponibilidad->fecha_cita_inicio)[1],0,5) 
+                . ' - ' . substr(explode(" ", $disponibilidad->fecha_cita_fin)[1],0,5);
+                return response()->json([
+                    'code'=> 99,
+                    'titulo'=>Respuesta::mensaje_cita_horario_no_disponible,
+                    'mensaje'=> $message
+                ]);
+            }
             
-            return response()->json([
-                'code'=>200,
-                'titulo'=>Respuesta::mensaje_exito_actualizar_cita,
-                'mensaje'=>Respuesta::mensaje_exito_actualizar_cita
-            ]);
         }catch(\Exception $e){  
             report($e);
             DB::rollBack();
