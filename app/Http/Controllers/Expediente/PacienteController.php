@@ -96,11 +96,8 @@ class PacienteController extends Controller
      */
     public function store(Request $request)
     {
-        $paciente = Paciente::find($id);
         try {
-            $cualquiera=$request->post();
             DB::beginTransaction();
-            $user = Auth::user()->USERNAME;
 
             $paciente = new Paciente;
             $paciente->nombre = $request->nombre;
