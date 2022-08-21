@@ -100,14 +100,12 @@ class PacienteController extends Controller
             DB::beginTransaction();
 
             $paciente = new Paciente;
-            $paciente->id = Ulid::generate(true);
             $paciente->nombre = $request->nombre;
             $paciente->apellido = $request->apellidos;
             $paciente->correo = $request->correo;
             $paciente->direccion = $request->direccion;
             $paciente->municipio = $request->municipio;
             $paciente->fecha_nacimiento=$request->fecha_nacimiento;
-            $paciente->numero_exp = $request->numero_exp;
             $paciente->sexo = $request->sexo;
             $paciente->telefono = $request->telefono;
             $paciente->save();
@@ -155,9 +153,43 @@ class PacienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function updatePaciente(Request $request)
     {
-        //
+        $paciente = $request->post();
+        Log::warning($paciente);
+        try {
+            DB::beginTransaction();
+            Paciente::where('numero_exp', '=', $paciente['numero_exp'])->update(
+                [
+                    'telefono' => $paciente['telefono'],
+                    'nombre' => $paciente['nombre'],
+                    'apellido' => $paciente['apellido'],
+                    'direccion' => $paciente['direccion'],
+                    'fecha_nacimiento' => $paciente['fecha_nacimiento'],
+                    'sexo' => $paciente['sexo'],
+                    'correo' => $paciente['correo'],
+                    'municipio' => $paciente['municipio'],
+                    'edad' => $paciente['edad'],
+                    'ocupacion' => $paciente['ocupacion'],
+                ]
+            );
+            DB::commit();
+            
+            return response()->json([
+                'code' => 200,
+                'titulo' => Respuesta::act_expediente,
+                'mensaje' => Respuesta::act_expediente
+            ]);
+        } catch (\Exception $e) {
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code' => 99,
+                'titulo' => Respuesta::error_act_expediente,
+                'mensaje' => Respuesta::error_act_expediente
+            ]);
+        }
     }
 
     /**

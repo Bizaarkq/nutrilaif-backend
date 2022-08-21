@@ -14,6 +14,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
         Route::get('/list/{llave?}', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
         Route::delete('/delete/{id?}', 'App\Http\Controllers\Expediente\PacienteController@deletePaciente')->name('delete-paciente');
+        Route::post('/update/{id?}','App\Http\Controllers\Expediente\PacienteController@updatePaciente')->name('update');
     });
     
     Route::prefix('catalogo')->group(function(){
