@@ -106,6 +106,7 @@ class PacienteController extends Controller
             $paciente->direccion = $request->direccion;
             $paciente->municipio = $request->municipio;
             $paciente->fecha_nacimiento=$request->fecha_nacimiento;
+            $paciente->numero_exp = $request->numero_exp;
             $paciente->sexo = $request->sexo;
             $paciente->telefono = $request->telefono;
             $paciente->save();
@@ -157,7 +158,6 @@ class PacienteController extends Controller
     public function updatePaciente(Request $request)
     {
         $paciente = $request->post();
-        Log::warning($paciente);
         try {
             DB::beginTransaction();
             Paciente::where('numero_exp', '=', $paciente['numero_exp'])->update(
