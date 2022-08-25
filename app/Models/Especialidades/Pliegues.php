@@ -24,16 +24,11 @@ class Pliegues extends Model
         'c_brazo_contraido',
         'c_pierna',
         'p_humero',
-        'p_femur',
-        'pliegues',
-        'porcentaje_grasa',
-        'masa_grasa'
+        'p_femur'
     ];
     protected $dates=['created_at','updated_at','deleted_at'];
     public function consulta(){
         return $this->belongsTo(Consulta::class);
     }
-    public function especialidad(){
-        return $this->hasOne(Especialidad::class);
-    }
+    
 }
