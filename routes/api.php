@@ -54,5 +54,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/update/fechora', 'App\Http\Controllers\Citas\CitasController@updateFechaHora')->name('editar-hora-cita');
         Route::delete('/delete/{id}', 'App\Http\Controllers\Citas\CitasController@delete')->name('delete-cita');
     });
+    Route::prefix('pliegues')->group(function(){
+        Route::post('/save/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@store')->name('guardar-pliegues');
+        Route::post('/update/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@update')->name('editar-pliegues');
+        Route::get('/get/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@getPliegues')->name('obtener-pliegues');
+        Route::get('/list/{id?}', 'App\Http\Controllers\Especialidades\PlieguesController@listarPliegues')->name('listar-pliegues');
+            
+    });
 
 });

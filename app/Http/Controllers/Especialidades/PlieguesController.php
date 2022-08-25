@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Especialidades;
 
 use App\Helpers\Respuesta;
 use App\Http\Controllers\Controller;
+use App\Models\Consulta\Consulta;
 use App\Models\Especialidades\Pliegues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,6 @@ class PlieguesController extends Controller
         $pliegues=new Pliegues;
         $pliegues->id=$request->id;
         $pliegues->id_consulta=$request->id_consulta;
-        $pliegues->id_especialidad=$request->id_especialidad;
         $pliegues->p_bicipital=$request->p_bicipital;
         $pliegues->p_tricipital=$request->p_tricipital;
         $pliegues->p_sub_escapular=$request->p_sub_escapular;
@@ -64,9 +64,6 @@ class PlieguesController extends Controller
         $pliegues->c_pierna=$request->c_pierna;
         $pliegues->p_humero=$request->p_humero;
         $pliegues->p_femur=$request->p_femur;
-        $pliegues->pliegues=$request->pliegues;
-        $pliegues->porcentaje_grasa=$request->porcentaje_grasa;
-        $pliegues->masa_grasa=$request->masa_grasa;
         $pliegues->save();
 
         DB::commit();
@@ -74,7 +71,7 @@ class PlieguesController extends Controller
         return response()->json([
             'code'=>200,
             'titulo'=>Respuesta::titulo_exito_generico,
-            'mensaje'=>Respuesta::mensaje_exito_generico
+            'mensaje'=>Respuesta::mensaje_exito_generico_pliegues
         ]);
         }catch(\Exception $e){
             report($e);
@@ -82,7 +79,7 @@ class PlieguesController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::mensaje_error_pliegues
             ]);
         }
     }
@@ -131,5 +128,37 @@ class PlieguesController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getPliegues($id){
+        try{
+            /*Obtiene las últimas 5 pliegues de un paciente*/
+            $pliegues=Consulta::
+                join('pliegues','pliegues.id_consulta','consulta.id')
+                ->where('consulta.id_paciente','=',$id)
+                ->select(
+                    'pliegues.id',
+                    'id_consulta',
+                    'p_bicipital',
+                    'p_tricipital',
+                    'p_sub_escapular',
+                    'p_supra_iliaco',
+                    'p_abdominal',
+                    'p_muslo_anterior',
+                    'p_pierna_medial',
+                    'c_brazo_contraido',
+                    'c_pierna',
+                    'p_humero',
+                    'p_femur'
+                )->orderByDesc('pliegues.created_at')->limit(5)->get();
+                return $pliegues;
+                
+        }catch(\Exception $e){
+            report($e);
+            return response()->json([
+                'code'=>99,
+                'titutlo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::error_obt_pliegues
+            ]);
+        }
     }
 }
