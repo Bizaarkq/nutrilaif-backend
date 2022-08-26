@@ -148,8 +148,7 @@ class PlieguesController extends Controller
                     'c_brazo_contraido',
                     'c_pierna',
                     'p_humero',
-                    'p_femur',
-                    'pliegues.created_at'
+                    'p_femur'
                 )->orderByDesc('pliegues.created_at')->limit(5)->get();
                 return $pliegues;
                 
