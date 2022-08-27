@@ -9,10 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ulid\Ulid;
 use App\Models\Expediente\Paciente;
-use Arcanedev\LogViewer\Entities\Log as EntitiesLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log as FacadesLog;
 use Log;
 
 class ConsultaController extends Controller
@@ -267,11 +265,17 @@ class ConsultaController extends Controller
         if ($id==null) {
             foreach ($subConsulta as $tabla => $campo) {
                 $subConsulta[$tabla]['id_consulta'] = $id_consulta;
+                $subConsulta[$tabla]['created_user'] = $user;
+                $subConsulta[$tabla]['created_at'] = Carbon::now();
+                $subConsulta[$tabla]['updated_user'] = $user;
+                $subConsulta[$tabla]['updated_at'] = Carbon::now();
                 DB::table($tabla)->insert($subConsulta[$tabla]);
             }
         } else {
             foreach ($subConsulta as $tabla => $campo) {
                 $subConsulta[$tabla]['id_consulta'] = $id_consulta;
+                $subConsulta[$tabla]['updated_user'] = $user;
+                $subConsulta[$tabla]['updated_at'] = Carbon::now();
                 DB::table($tabla)->where('id_consulta', $id)->update($subConsulta[$tabla]);
             }
         }
@@ -312,7 +316,10 @@ class ConsultaController extends Controller
             $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
             $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            $pliegues = $consulta->pliegue->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            
             $ultimaDieta=Consulta::where('id_paciente',$consulta->id_paciente)->where('dieta','!=','[]')->whereJsonLength('dieta','>',0)->select('dieta')->orderBy('created_at','desc')->first();
+            
             $formulario = [
             'recordatorio' => json_decode($consulta->recordatorio,true),
             'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
@@ -322,7 +329,8 @@ class ConsultaController extends Controller
                 'historia_dietetica' => $historiaDietetica,
                 'datos_antropo' => $datosAntropo,
                 'datos_medicos' => $datosMedicos,
-                'examen_labs' => $examenLabs
+                'examen_labs' => $examenLabs,
+                'pliegues' => $pliegues
             ],
             "estado" => $consulta->estado,
             "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,

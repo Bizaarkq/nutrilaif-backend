@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasUlid;
 use App\Models\Expediente\Paciente;
+use App\Models\Especialidades\Pliegues;
 // para hacer el softdelete
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,5 +41,9 @@ class Consulta extends Model
     }
     public function paciente(){
         return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
+    }
+
+    public function pliegue(){
+        return $this->hasOne(Pliegues::class, 'id_consulta', 'id');
     }
 }

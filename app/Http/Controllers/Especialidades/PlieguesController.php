@@ -8,6 +8,7 @@ use App\Models\Consulta\Consulta;
 use App\Models\Especialidades\Pliegues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class PlieguesController extends Controller
 {
@@ -129,10 +130,10 @@ class PlieguesController extends Controller
     {
         //
     }
-    public function getPliegues($id){
+    public function getPliegues($id, $idConsulta = null){
         try{
             /*Obtiene las últimas 5 pliegues de un paciente*/
-            $pliegues=Consulta::
+            $pliegues = Consulta::
                 join('pliegues','pliegues.id_consulta','consulta.id')
                 ->where('consulta.id_paciente','=',$id)
                 ->select(
@@ -150,7 +151,16 @@ class PlieguesController extends Controller
                     'p_humero',
                     'p_femur',
                     'pliegues.created_at as fecha'
-                )->orderByDesc('pliegues.created_at')->limit(5)->get();
+                )->orderByDesc('pliegues.created_at')
+                ->where('pliegues.deleted_at', '=', null)
+                ->limit(5);
+            
+                if($idConsulta != null) {
+                    $pliegues->where('id_consulta','!=',$idConsulta);
+                }
+                
+                $pliegues = $pliegues->get();
+                
                 return $pliegues;
                 
         }catch(\Exception $e){
