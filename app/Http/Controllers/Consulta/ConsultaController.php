@@ -298,50 +298,50 @@ class ConsultaController extends Controller
     }
 
     public function getConsulta($id){
-try {
-    $consulta = Consulta::where('id', $id)->select(
-        'id',
-        'id_paciente',
-        'fecha_dieta',
-        'recordatorio',
-        'frecuencia_consumo',
-        'planificacion_dieta',
-        'dieta',
-        'estado',
-        'es_subsecuente'
-    )
-    ->first();
-    $historiaDietetica = $consulta->historiaDietetica->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-    $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-    $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-    $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
-    $pliegues = $consulta->pliegue ? 
-        $consulta->pliegue
-        ->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at'])
-        : null;
-
-    $ultimaDieta = Consulta::where('id_paciente', $consulta->id_paciente)
-    ->whereJsonLength('dieta', '>', 0)
-    ->select('dieta')
-    ->orderBy('created_at', 'desc')
-    ->first();
-    
-    $formulario = [
-    'recordatorio' => json_decode($consulta->recordatorio, true),
-    'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
-    'planificacion_dieta' => json_decode($consulta->planificacion_dieta, true),
-    'dieta' => $ultimaDieta ? json_decode($ultimaDieta->dieta, true) : [],
-    'subconsulta_form' => [
-        'historia_dietetica' => $historiaDietetica,
-        'datos_antropo' => $datosAntropo,
-        'datos_medicos' => $datosMedicos,
-        'examen_labs' => $examenLabs,
-        'pliegues' => $pliegues
-    ],
-    "estado" => $consulta->estado,
-    "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,
-        ];
-        
+        try {
+            $consulta = Consulta::where('id', $id)->select(
+                'id',
+                'id_paciente',
+                'fecha_dieta',
+                'recordatorio',
+                'frecuencia_consumo',
+                'planificacion_dieta',
+                'dieta',
+                'estado',
+                'es_subsecuente'
+            )
+            ->first();
+            $historiaDietetica = $consulta->historiaDietetica->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            $datosAntropo = $consulta->datosAntropo->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            $datosMedicos = $consulta->datosMedicos->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            $examenLabs = $consulta->examenLabs->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at']);
+            $pliegues = $consulta->pliegue ? 
+                $consulta->pliegue
+                ->makeHidden(['created_at', 'updated_at', 'created_user', 'updated_user', 'deleted_at'])
+                : null;
+            
+            $ultimaDieta = Consulta::where('id_paciente', $consulta->id_paciente)
+            ->whereJsonLength('dieta', '>', 0)
+            ->select('dieta')
+            ->orderBy('created_at', 'desc')
+            ->first();
+            
+            $formulario = [
+            'recordatorio' => json_decode($consulta->recordatorio, true),
+            'frecuencia_consumo' => json_decode($consulta->frecuencia_consumo, true),
+            'planificacion_dieta' => json_decode($consulta->planificacion_dieta, true),
+            'dieta' => $ultimaDieta ? json_decode($ultimaDieta->dieta, true) : [],
+            'subconsulta_form' => [
+                'historia_dietetica' => $historiaDietetica,
+                'datos_antropo' => $datosAntropo,
+                'datos_medicos' => $datosMedicos,
+                'examen_labs' => $examenLabs,
+                'pliegues' => $pliegues
+            ],
+            "estado" => $consulta->estado,
+            "es_subsecuente" => $consulta->es_subsecuente == 1 ? true : false,
+                ];
+                
             return $formulario;
         }catch(\Exception $e){
             report($e);
