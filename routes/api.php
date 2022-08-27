@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('pliegues')->group(function(){
         Route::post('/save/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@store')->name('guardar-pliegues');
         Route::post('/update/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@update')->name('editar-pliegues');
-        Route::get('/get/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@getPliegues')->name('obtener-pliegues');
+        Route::get('/get/{id}/{idConsulta?}', 'App\Http\Controllers\Especialidades\PlieguesController@getPliegues')->name('obtener-pliegues');
         Route::get('/list/{id?}', 'App\Http\Controllers\Especialidades\PlieguesController@listarPliegues')->name('listar-pliegues');
             
     });
