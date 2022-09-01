@@ -22,32 +22,35 @@ class AlimentoController extends Controller
     {
         if ($llave==null) {
             $alimentoQuery=Alimento::select(
-                'id', 
-                'codigo', 
-                'nombre', 
-                'calorias', 
-                'calcio', 
-                'carbohidratos', 
-                'grasas', 
-                'hierro', 
-                'potasio', 
-                'proteinas', 
-                'sodio')
+                'alimentos.id', 
+                'pais.codigo as cod_pais',
+                'alimentos.codigo', 
+                'alimentos.nombre', 
+                'alimentos.calorias', 
+                'alimentos.calcio', 
+                'alimentos.carbohidratos', 
+                'alimentos.grasas', 
+                'alimentos.hierro', 
+                'alimentos.potasio', 
+                'alimentos.proteinas', 
+                'alimentos.sodio')
+                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
                 ->get();
         } else {
             $alimentoQuery=Alimento::select(
-                'id', 
-                'codigo', 
-                'nombre', 
-                'calorias', 
-                'calcio', 
-                'carbohidratos', 
-                'grasas', 
-                'hierro', 
-                'potasio', 
-                'proteinas', 
-                'sodio'
-                )
+                'alimentos.id', 
+                'pais.codigo as cod_pais',
+                'alimentos.codigo', 
+                'alimentos.nombre', 
+                'alimentos.calorias', 
+                'alimentos.calcio', 
+                'alimentos.carbohidratos', 
+                'alimentos.grasas', 
+                'alimentos.hierro', 
+                'alimentos.potasio', 
+                'alimentos.proteinas', 
+                'alimentos.sodio')
+                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
                 ->where('nombre', 'like', '%'.$llave.'%')
                 ->latest()
                 ->take(15)
@@ -75,12 +78,14 @@ class AlimentoController extends Controller
     public function store(Request $request)
     {
        try{
+            $cualquiera=$request->post();
             DB::beginTransaction();
             $user = Auth::user()->USERNAME;
 
             $alimento= new Alimento;
             $alimento->nombre=$request->nombre;
             $alimento->codigo=$request->codigo;
+            $alimento->cod_pais=$request->cod_pais;
             $alimento->calorias=$request->calorias;
             $alimento->grasas=$request->grasas;
             $alimento->proteinas=$request->proteinas;
@@ -97,7 +102,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::mensaje_exito_generico
+                'mensaje'=>Respuesta::mensaje_exito_generico_alimentos
             ]);
         }catch(\Exception $e){
             report($e);
@@ -105,7 +110,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::mensaje_error_alimentos
             ]);
         }
     }
@@ -150,7 +155,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>200,
                 'titulo'=>Respuesta::titulo_exito_generico,
-                'mensaje'=>Respuesta::mensaje_exito_generico
+                'mensaje'=>Respuesta::act_alimentos
             ]);
         }catch(\Exception $e){
             report($e);
@@ -158,7 +163,7 @@ class AlimentoController extends Controller
             return response()->json([
                 'code'=>99,
                 'titulo'=>Respuesta::titulo_error_generico,
-                'mensaje'=>Respuesta::mensaje_error_generico
+                'mensaje'=>Respuesta::error_act_alimentos
             ]);
         }
         //$alimentoUpdate->update($request->all());
@@ -173,9 +178,24 @@ class AlimentoController extends Controller
     public function destroy(Request $request)
     {
         $id_alimento = $request->post();
-        $fechaBA=Carbon::now();
-        DB::beginTransaction();
-        Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
-        DB::commit();
+        try{
+            $fechaBA=Carbon::now();
+            DB::beginTransaction();
+            Alimento::where('codigo','=', $id_alimento[0])->update(['deleted_at'=>$fechaBA]);
+            DB::commit();
+            return response()->json([
+                'code'=>200,
+                'titulo'=>Respuesta::titulo_exito_generico,
+                'mensaje'=>Respuesta::borrado_alimentos
+            ]);
+        }catch(\Exception $e){
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code'=>99,
+                'titulo'=>Respuesta::titulo_error_generico,
+                'mensaje'=>Respuesta::error_borrado_alimentos
+            ]);
+        }
     }
 }

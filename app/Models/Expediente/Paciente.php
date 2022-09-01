@@ -15,5 +15,5 @@ class Paciente extends Model
     protected $table='paciente';
     protected $KeyTipe='string';
     protected $fillable = [];
-    protected $dates=['created_at', 'updated_at'];
+    protected $dates=['created_at', 'updated_at', 'deleted_at', 'fecha_creacion', 'fecha_nacimiento'];
 }
