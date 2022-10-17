@@ -37,7 +37,9 @@ class PacienteController extends Controller
                 'paciente.id',
                 'paciente.correo',
                 'paciente.telefono',
+                'paciente.inactivo'
             )
+            ->orderByAsc('paciente.inactivo')
             ->orderByDesc('paciente.created_at')
             ->get();
         }else{
@@ -204,7 +206,7 @@ class PacienteController extends Controller
             DB::beginTransaction();
 
             $paciente = Paciente::find($id);
-            $paciente->delete();
+            $paciente->inactivo = !$paciente->inactivo;
 
             DB::commit();
             
