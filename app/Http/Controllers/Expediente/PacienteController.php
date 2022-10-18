@@ -39,7 +39,7 @@ class PacienteController extends Controller
                 'paciente.telefono',
                 'paciente.inactivo'
             )
-            ->orderByAsc('paciente.inactivo')
+            ->orderBy('paciente.inactivo', 'asc')
             ->orderByDesc('paciente.created_at')
             ->get();
         }else{
