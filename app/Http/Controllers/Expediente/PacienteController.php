@@ -206,14 +206,15 @@ class PacienteController extends Controller
             DB::beginTransaction();
 
             $paciente = Paciente::find($id);
-            $paciente->inactivo = !$paciente->inactivo;
-
+            $paciente->inactivo = $paciente->inactivo == 1 ? 0 : 1;
+            $mensajeRespuesta = $paciente->inactivo == 1 ? Respuesta::baja_expediente : Respuesta::alta_expediente;
+            $paciente->save();
             DB::commit();
             
             return response()->json([
                 'code' => 200,
                 'titulo' => Respuesta::titulo_exito_generico,
-                'mensaje' => Respuesta::baja_expediente
+                'mensaje' => $mensajeRespuesta
             ]);
         } catch (\Exception $e) {
             report($e);

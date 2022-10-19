@@ -20,6 +20,7 @@ class Respuesta
     //Eliminación correcta
     const borrado_alimentos='El alimento fue eliminado';
     const baja_expediente='El expediente fue dado de baja de manera correcta';
+    const alta_expediente='El expediente fue reactivado de manera correcta';
 
     const titulo_error_generico = 'Error';
     const mensaje_error_generico = 'No se pudo realizar la accion, intente nuevamente';
