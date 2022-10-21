@@ -39,7 +39,8 @@ class PacienteController extends Controller
                 'paciente.id',
                 'paciente.correo',
                 'paciente.telefono',
-                'paciente.inactivo'
+                'paciente.inactivo',
+                'paciente.mujerEmbLac'
             )
             ->orderBy('paciente.inactivo', 'asc')
             ->orderByDesc('paciente.created_at')
@@ -76,6 +77,7 @@ class PacienteController extends Controller
                 'paciente.municipio',
                 'paciente.edad',
                 'paciente.fecha_creacion as fechaExpediente',
+                'paciente.mujerEmbLac'
             )->get();
         }
         
@@ -103,6 +105,7 @@ class PacienteController extends Controller
             $paciente->numero_exp = $request->numero_exp;
             $paciente->sexo = $request->sexo;
             $paciente->telefono = $request->telefono;
+            $paciente->mujerEmbLac=$request->mujerEmbLac;
             $paciente->save();
 
             DB::commit();
@@ -148,6 +151,7 @@ class PacienteController extends Controller
                     'municipio' => $paciente['municipio'],
                     'edad' => $paciente['edad'],
                     'ocupacion' => $paciente['ocupacion'],
+                    'mujerEmbLac' => $paciente['mujerEmbLac']
                 ]
             );
             DB::commit();

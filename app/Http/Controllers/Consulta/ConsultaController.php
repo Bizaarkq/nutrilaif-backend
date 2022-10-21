@@ -224,6 +224,7 @@ class ConsultaController extends Controller
             $paciente->edad = $datosConsulta['paciente']['edad'];
             $paciente->ocupacion = $datosConsulta['paciente']['ocupacion'];
             $paciente->fecha_creacion = $datosConsulta['paciente']['fechaExpediente'];
+            $paciente->mujerEmbLac = $datosConsulta['paciente']['mujerEmbLac'];
             $paciente->created_user = $user;
             $paciente->updated_user = $user;
             $paciente->save();
