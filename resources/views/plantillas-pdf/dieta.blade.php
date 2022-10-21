@@ -82,7 +82,6 @@
         }
     </style>
 </head>
-
 <body>
     <p style="text-indent: 0pt;text-align: left;"><span>
             <table border="0" cellspacing="0" cellpadding="0">
@@ -93,7 +92,7 @@
                 </tr>
             </table>
         </span></p>
-    <p style="padding-top: 1pt;padding-left: 99pt;text-indent: 0pt;text-align: left;">Plan:</p>
+    <p style="padding-top: 1pt;padding-left: 99pt;text-indent: 0pt;text-align: left;">Plan: {{$dieta['planDeDieta']}}</p>
     <p style="padding-bottom: 2pt;padding-left: 99pt;text-indent: 0pt;text-align: left;">Nombre del paciente: {{ $paciente->nombre }} {{ $paciente->apellido }}</p>
     <p style="padding-bottom: 2pt;padding-left: 99pt;text-indent: 0pt;text-align: left;">Fecha: {{ $dieta['fechaCreacionDieta'] }}</p>
     <br><br>
@@ -129,7 +128,8 @@
                 colspan="5" bgcolor="#C5DFB3">
                 <p class="s3"
                     style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
-                    LUNES</p>
+                    LUNES
+                </p>
             </td>
         </tr>
         <tr style="height:135pt">
@@ -156,6 +156,222 @@
             <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
                     {{$dieta['dieta']['lunes']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    MARTES
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['martes']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['martes']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['martes']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['martes']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['martes']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    MIERCOLES
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['miercoles']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['miercoles']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['miercoles']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['miercoles']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['miercoles']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    JUEVES
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['jueves']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['jueves']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['jueves']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['jueves']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['jueves']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    VIERNES
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['viernes']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['viernes']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['viernes']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['viernes']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['viernes']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    SABADO
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['sabado']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['sabado']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['sabado']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['sabado']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['sabado']['cena']}}
+                </p>
+            </td>
+        </tr>
+        <tr style="height:16pt">
+            <td style="width:758pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                colspan="5" bgcolor="#C5DFB3">
+                <p class="s3"
+                    style="padding-left: 352pt;padding-right: 352pt;text-indent: 0pt;line-height: 13pt;text-align: center;">
+                    DOMINGO
+                </p>
+            </td>
+        </tr>
+        <tr style="height:135pt">
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                        {{$dieta['dieta']['domingo']['desayuno']}}
+                    </p> 
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['domingo']['refrigerioDesayuno']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['domingo']['almuerzo']}}
+                </p>
+            </td>
+            <td style="width:71pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt;overflow-wrap: anywhere;">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['domingo']['refrigerioAlmuerzo']}}
+                </p> 
+            </td>
+            <td style="width:220pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-left: 7pt;text-indent: 0pt;line-height: 13pt;text-align: left;">
+                    {{$dieta['dieta']['domingo']['cena']}}
                 </p>
             </td>
         </tr>

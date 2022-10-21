@@ -203,14 +203,16 @@ class PacienteController extends Controller
     public function obtenerDietaPdf($id, Request $request)
     {
         $paciente = Paciente::find($id);
-        $dieta = json_decode(json_encode($request->post()), true);
+        $dieta = $request->post();
 
         $dieta['fechaCreacionDieta'] = date('d/m/Y', strtotime($dieta['fechaCreacionDieta']));
 
         $pdf = PDF::loadView('plantillas-pdf/dieta', compact('paciente', 'dieta'));
         $pdf->setPaper('A4', 'landscape');
         $nombreArchivo = 'Dieta-'.$paciente->numero_exp.'-'.date("YmdHis").'.pdf';
+        
         Storage::put('public/'.$nombreArchivo, $pdf->output());
+
         return response()->file(storage_path('app/public/'.$nombreArchivo), [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="Dieta-'.$paciente->numero_exp.'"'
