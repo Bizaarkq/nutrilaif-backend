@@ -210,9 +210,8 @@ class PacienteController extends Controller
         $pdf = PDF::loadView('plantillas-pdf/dieta', compact('paciente', 'dieta'));
         $pdf->setPaper('A4', 'landscape');
         $nombreArchivo = 'Dieta-'.$paciente->numero_exp.'-'.date("YmdHis").'.pdf';
-
-        Storage::put(storage_path('app/public'.$nombreArchivo), $pdf->output());
-        return response()->file(storage_path('app/public'.$nombreArchivo), [
+        Storage::put('public/'.$nombreArchivo, $pdf->output());
+        return response()->file(storage_path('app/public/'.$nombreArchivo), [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="Dieta-'.$paciente->numero_exp.'"'
         ]);
