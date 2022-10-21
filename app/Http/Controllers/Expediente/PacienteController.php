@@ -215,20 +215,6 @@ class PacienteController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="Dieta-'.$paciente->numero_exp.'"'
         ]);
-        //return $pdf->download('dieta.pdf');
-        // $pdf::SetTitle('Dieta');
-        // $pdf::AddPage();
-        // $pdf::writeHTML($html, true, false, true, false, '');
-        // $pdf::Output(public_path('Dieta.pdf', 'F'));
-
-        // $pdf::Output(public_path('Dieta.pdf'));
-
-        //return response()->download(public_path('Dieta.pdf'));
-        
-        // $dieta = Dieta::where('id_paciente', $id)->first();
-        // $pdf = PDF::loadView('pdf.dieta', compact('paciente', 'dieta'));
-        // return $pdf->download('dieta.pdf');
-
     }
 
 
