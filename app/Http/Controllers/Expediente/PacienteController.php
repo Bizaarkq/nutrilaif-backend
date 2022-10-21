@@ -10,6 +10,8 @@ use Ulid\Ulid;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\Respuesta;
+use \PDF;
+use Storage;
 
 class PacienteController extends Controller
 {
@@ -81,16 +83,6 @@ class PacienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -130,24 +122,6 @@ class PacienteController extends Controller
             ]);
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     /**
      * Update the specified resource in storage.
@@ -226,4 +200,26 @@ class PacienteController extends Controller
             ]);
         }
     }
+
+    public function obtenerDietaPdf($id, Request $request)
+    {
+        $paciente = Paciente::find($id);
+        $dieta = $request->post();
+
+        $dieta['fechaCreacionDieta'] = date('d/m/Y', strtotime($dieta['fechaCreacionDieta']));
+
+        $pdf = PDF::loadView('plantillas-pdf/dieta', compact('paciente', 'dieta'));
+        $pdf->setPaper('A4', 'landscape');
+        $nombreArchivo = 'Dieta-'.$paciente->numero_exp.'-'.date("YmdHis").'.pdf';
+        
+        Storage::put('public/'.$nombreArchivo, $pdf->output());
+
+        return response()->file(storage_path('app/public/'.$nombreArchivo), [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="Dieta-'.$paciente->numero_exp.'"'
+        ]);
+    }
+
+
+
 }
