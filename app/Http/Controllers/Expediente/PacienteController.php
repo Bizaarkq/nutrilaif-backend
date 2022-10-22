@@ -22,7 +22,6 @@ class PacienteController extends Controller
      */
     public function listarPacientes($llave=null)
     {
-        DB::enableQueryLog();
         //Lista de pacientes enviada como json
         $nutri=Auth::user()->ID;
         $hoy = Carbon::today()->toDateString();
@@ -90,7 +89,6 @@ class PacienteController extends Controller
                 'paciente.mujerEmbLac'
             )->get();
         }
-        LOG::info(json_encode(DB::getQueryLog()));
         return json_encode($pacientes);
     }
 
