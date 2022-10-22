@@ -267,7 +267,8 @@ class CitasController extends Controller
                 'updated_user' => Auth::user()->USERNAME
             ]);
         }else{
-            DB::table('nutricionista_paciente')
+            if($nutriPaciente->tipo_nutri == 'A'){
+                DB::table('nutricionista_paciente')
                 ->where('id_nutric', $idNutricionista)
                 ->where('id_paciente', $idPaciente)
                 ->update([
@@ -275,6 +276,7 @@ class CitasController extends Controller
                     'updated_at' => Carbon::now(),
                     'updated_user' => Auth::user()->USERNAME
                 ]);
+            }
         }
     }
 

@@ -23,6 +23,7 @@ class ConsultaController extends Controller
     public function listarConsulta($llave=null)
     {
         $nutri=Auth::user()->ID;
+
         if($llave==null){
             $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.estado')
             ->where('id_nutric','=',$nutri)
@@ -33,8 +34,21 @@ class ConsultaController extends Controller
         }
         else{
             $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.estado')
-            ->where([['id_nutric','=',$nutri],['id_paciente','=',$llave],])
+            ->where(function($query) use ($llave, $nutri){
+                $query->where(function($query) use ($llave, $nutri){
+                    $query->where('consulta.id_nutric', '=', $nutri)
+                    ->where('consulta.id_paciente', '=', $llave);
+                })
+                ->orWhere(function($query) use ($llave, $nutri){
+                    $query->where('nutricionista_paciente.id_nutric', '=', $nutri)
+                    ->where('consulta.id_paciente', '=', $llave);
+                });
+            })
             ->join('paciente', 'paciente.id', '=', 'consulta.id_paciente')
+            ->join('nutricionista_paciente', function($join) use ($nutri){
+                $join->on('nutricionista_paciente.id_paciente', '=', 'paciente.id')
+                ->where('nutricionista_paciente.id_nutric', '=', $nutri);
+            })
             ->where('paciente.deleted_at', '=', null)
             ->orderBy('fecha_creacion','desc')
             ->get();
@@ -232,7 +246,11 @@ class ConsultaController extends Controller
                 [
                     'id_nutric' => $id_nutricionista,
                     'id_paciente' => $paciente->id,
-                    'tipo_nutri' => 'E'
+                    'tipo_nutri' => 'E',
+                    'created_user' => $user,
+                    'updated_user' => $user,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 ]
             );
             $consulta = new Consulta;
