@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Helpers\Respuesta;
 use \PDF;
 use Storage;
-
+use Carbon\Carbon;
 class PacienteController extends Controller
 {
     /**
@@ -24,9 +24,17 @@ class PacienteController extends Controller
     {
         //Lista de pacientes enviada como json
         $nutri=Auth::user()->ID;
+        $hoy = Carbon::today()->toDateString();
         $query = DB::table('nutricionista_paciente')
         ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
         ->where('nutricionista_paciente.id_nutric', '=', $nutri)
+        ->where(function($query) use ($hoy){
+            $query->where('nutricionista_paciente.tipo_nutri', '=', 'E')
+            ->orWhere(function($query) use ($hoy){
+                $query->where('nutricionista_paciente.tipo_nutri', '=', 'A')
+                ->where('nutricionista_paciente.cita_especial', '>', $hoy);
+            });
+        })
         ->where('paciente.deleted_at', '=', null);
 
         if($llave==null){
@@ -40,7 +48,8 @@ class PacienteController extends Controller
                 'paciente.correo',
                 'paciente.telefono',
                 'paciente.inactivo',
-                'paciente.mujerEmbLac'
+                'paciente.mujerEmbLac',
+                'paciente.municipio',
             )
             ->orderBy('paciente.inactivo', 'asc')
             ->orderByDesc('paciente.created_at')
@@ -80,7 +89,6 @@ class PacienteController extends Controller
                 'paciente.mujerEmbLac'
             )->get();
         }
-        
         return json_encode($pacientes);
     }
 

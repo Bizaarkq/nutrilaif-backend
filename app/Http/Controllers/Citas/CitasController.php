@@ -44,6 +44,7 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
+
             $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
             $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista, $citaRequest['id']);
             if(!(array)$disponibilidad){
@@ -71,6 +72,11 @@ class CitasController extends Controller
                 if(!$citaRequest['id']) $cita->created_user = $nutri;
                 $cita->updated_user = $nutri;
                 $cita->save();
+
+                if($citaRequest['id_paciente'] != null){
+                    $this->asignarNutricionistaAuxiliar($nutricionista, $citaRequest['id_paciente'], $citaRequest['fecha_cita_fin']);
+                }
+
                 DB::commit();
             }else{
                 $fecha = Carbon::parse(explode(" ",$disponibilidad->fecha_cita_inicio)[0]);
@@ -137,8 +143,9 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
+            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
 
-            $disponibilidad = $citaRequest['id_nutric'] ? $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'],$citaRequest['id_nutric']) : null;    
+            $disponibilidad = $citaRequest['id_nutric'] != null ? $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'],$citaRequest['id_nutric']) : null;    
             
             if(!(array)$disponibilidad){
 
@@ -148,6 +155,10 @@ class CitasController extends Controller
                 $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
                 $cita->updated_user = Auth::user()->USERNAME;
                 $cita->save();
+
+                if($citaRequest['id_paciente'] != null){
+                    $this->asignarNutricionistaAuxiliar($nutricionista, $citaRequest['id_paciente'], $citaRequest['fecha_cita_fin']);
+                }
                 DB::commit();
                 
                 return response()->json([
@@ -212,26 +223,62 @@ class CitasController extends Controller
 
     public function consultarDisponibilidad($fechaInicio, $fechaFin, $nutricionista, $id=null){
         $citas = Cita::where(function($query) use ($fechaInicio, $fechaFin, $nutricionista){
-                $query->where('fecha_cita_inicio', '>=', $fechaInicio)
-                    ->where('fecha_cita_inicio', '<=', $fechaFin)
-                    ->where('id_nutric', $nutricionista);
+                $query->where(function($query) use ($fechaInicio, $fechaFin, $nutricionista){
+                        $query->where('fecha_cita_inicio', '>=', $fechaInicio)
+                            ->where('fecha_cita_inicio', '<=', $fechaFin)
+                            ->where('id_nutric', $nutricionista);
+                    })
+                    ->orWhere(function ($query) use ($fechaInicio, $nutricionista) {
+                        $query->where('fecha_cita_inicio', '<=', $fechaInicio)
+                            ->where('fecha_cita_fin', '>=', $fechaInicio)
+                            ->where('id_nutric', $nutricionista);
+                    })
+                    ->orWhere(function ($query) use ($fechaFin, $nutricionista) {
+                        $query->where('fecha_cita_inicio', '<=', $fechaFin)
+                            ->where('fecha_cita_fin', '>=', $fechaFin)
+                            ->where('id_nutric', $nutricionista);
+                    });
             })
-            ->orWhere(function ($query) use ($fechaInicio, $nutricionista) {
-                $query->where('fecha_cita_inicio', '<=', $fechaInicio)
-                    ->where('fecha_cita_fin', '>=', $fechaInicio)
-                    ->where('id_nutric', $nutricionista);
-            })
-            ->orWhere(function ($query) use ($fechaFin, $nutricionista) {
-                $query->where('fecha_cita_inicio', '<=', $fechaFin)
-                    ->where('fecha_cita_fin', '>=', $fechaFin)
-                    ->where('id_nutric', $nutricionista);
+            ->where(function ($query) use ($id) {
+                $query->where('id', '!=', $id);
             })
             ->orderBy('created_at', 'desc');
 
-        if($id){
-            $citas = $citas->where('id', '!=', $id);
-        }
-
         return $citas->first();
     }
+
+    public function asignarNutricionistaAuxiliar($idNutricionista, $idPaciente, $fechaFin){
+        $nutriPaciente = DB::table('nutricionista_paciente')
+            ->where('id_nutric', $idNutricionista)
+            ->where('id_paciente', $idPaciente)
+            ->first();
+        
+        $fecha = Carbon::parse($fechaFin);
+        $fecha->addDays(7);
+        if(!(array)$nutriPaciente){
+            DB::table('nutricionista_paciente')->insert([
+                'id_nutric' => $idNutricionista,
+                'id_paciente' => $idPaciente,
+                'tipo_nutri' => 'A',
+                'cita_especial' => $fecha,
+                'created_at' => Carbon::now(),
+                'created_user' => Auth::user()->USERNAME,
+                'updated_at' => Carbon::now(),
+                'updated_user' => Auth::user()->USERNAME
+            ]);
+        }else{
+            if($nutriPaciente->tipo_nutri == 'A'){
+                DB::table('nutricionista_paciente')
+                ->where('id_nutric', $idNutricionista)
+                ->where('id_paciente', $idPaciente)
+                ->update([
+                    'cita_especial' => $fecha,
+                    'updated_at' => Carbon::now(),
+                    'updated_user' => Auth::user()->USERNAME
+                ]);
+            }
+        }
+    }
+
+
 }
