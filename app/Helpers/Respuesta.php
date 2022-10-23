@@ -49,4 +49,10 @@ class Respuesta
     const mensaje_exito_eliminar_cita='La cita se eliminó de manera correcta';
     const mensaje_error_eliminar_cita='La cita no se pudo eliminar';
     const mensaje_cita_horario_no_disponible='El horario seleccionado no está disponible';
+
+    //Notificacion 
+    const mensaje_exito_guardar_notificacion='La notificación por correo se envió de manera correcta';
+    const mensaje_error_guardar_notificacion='La notificación por correo no se pudo enviar';
+    const mensaje_paciente_no_enviar_notif='El paciente no tiene las notificaciones por correo activadas';
+    const mensaje_no_correo_paciente='El paciente no tiene correo registrado';
 }
