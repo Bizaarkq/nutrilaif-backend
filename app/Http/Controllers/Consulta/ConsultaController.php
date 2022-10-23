@@ -239,6 +239,7 @@ class ConsultaController extends Controller
             $paciente->ocupacion = $datosConsulta['paciente']['ocupacion'];
             $paciente->fecha_creacion = $datosConsulta['paciente']['fechaExpediente'];
             $paciente->mujerEmbLac = $datosConsulta['paciente']['mujerEmbLac'];
+            $paciente->enviar_notif = $datosConsulta['paciente']['enviar_notif'] == "" || $datosConsulta['paciente']['enviar_notif'] == null ? 0 : $datosConsulta['paciente']['enviar_notif'];
             $paciente->created_user = $user;
             $paciente->updated_user = $user;
             $paciente->save();

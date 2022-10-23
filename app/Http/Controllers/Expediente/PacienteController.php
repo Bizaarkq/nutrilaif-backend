@@ -13,6 +13,8 @@ use App\Helpers\Respuesta;
 use \PDF;
 use Storage;
 use Carbon\Carbon;
+use App\Mail\Correo;
+
 class PacienteController extends Controller
 {
     /**
@@ -86,7 +88,8 @@ class PacienteController extends Controller
                 'paciente.municipio',
                 'paciente.edad',
                 'paciente.fecha_creacion as fechaExpediente',
-                'paciente.mujerEmbLac'
+                'paciente.mujerEmbLac',
+                'paciente.enviar_notif'
             )->get();
         }
         return json_encode($pacientes);
@@ -145,6 +148,9 @@ class PacienteController extends Controller
     public function updatePaciente(Request $request)
     {
         $paciente = $request->post();
+
+        $fechaNacimiento = Carbon::parse($paciente['fecha_nacimiento'])->format('Y-m-d');
+
         try {
             DB::beginTransaction();
             Paciente::where('numero_exp', '=', $paciente['numero_exp'])->update(
@@ -153,13 +159,14 @@ class PacienteController extends Controller
                     'nombre' => $paciente['nombre'],
                     'apellido' => $paciente['apellido'],
                     'direccion' => $paciente['direccion'],
-                    'fecha_nacimiento' => $paciente['fecha_nacimiento'],
+                    'fecha_nacimiento' => $fechaNacimiento,
                     'sexo' => $paciente['sexo'],
                     'correo' => $paciente['correo'],
                     'municipio' => $paciente['municipio'],
                     'edad' => $paciente['edad'],
                     'ocupacion' => $paciente['ocupacion'],
-                    'mujerEmbLac' => $paciente['mujerEmbLac']
+                    'mujerEmbLac' => $paciente['mujerEmbLac'],
+                    'enviar_notif' => $paciente['enviar_notif']
                 ]
             );
             DB::commit();
@@ -232,6 +239,78 @@ class PacienteController extends Controller
         ]);
     }
 
+
+    public function notificarPaciente(Request $request){
+
+        try {
+            $citaRequest = $request->post();
+
+            $fecha = Carbon::parse($citaRequest['fecha_cita_inicio']);
+            $fechaDia = $fecha->format('d/m/Y');
+            $horaInicio = $fecha->format('H:i');
+            $horaFin = Carbon::parse($citaRequest['fecha_cita_fin'])->format('H:i');
+            $asunto = "Nutrilife (cita)";
+            $titulo = $citaRequest['titulo'] ?? 'Cita nutricional';
+            $mensaje = 'Se ha agendado una cita para el día ' . $fecha->dayName . ', ' . $fecha->day . ' de ' . $fecha->monthName . ' de ' . $fecha->year . ' de ' . $horaInicio . ' a ' . $horaFin;
+
+            if($citaRequest['id_paciente']){
+                $paciente = Paciente::find($citaRequest['id_paciente']);
+                if($paciente->enviar_notif){
+                    if($paciente->correo){
+                        \Mail::to($paciente->correo)->send(new Correo([
+                            'asunto' => $asunto,
+                            'title'=> $titulo,
+                            'body'=> $mensaje,
+                            'att' => Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME
+                        ]));
+                    }else{
+                        return response()->json([
+                            'code' => 99,
+                            'titulo' => Respuesta::titulo_error_generico,
+                            'mensaje' => Respuesta::mensaje_no_correo_paciente
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'code' => 200,
+                        'titulo' => Respuesta::titulo_exito_generico,
+                        'mensaje' => Respuesta::mensaje_paciente_no_enviar_notif
+                    ]);
+                }
+            }else{
+                if($citaRequest['correo']){
+                    \Mail::to($citaRequest['correo'])->send(new Correo([
+                        'asunto' => $asunto,
+                        'title'=> $titulo,
+                        'body'=> $mensaje,
+                        'att' => Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME
+                    ]));
+                }else{
+                    return response()->json([
+                        'code' => 200,
+                        'titulo' => Respuesta::titulo_exito_generico,
+                        'mensaje' => Respuesta::mensaje_no_correo_paciente
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'code' => 200,
+                'titulo' => Respuesta::titulo_exito_generico,
+                'mensaje' => Respuesta::mensaje_exito_guardar_notificacion
+            ]);
+        }catch (\Exception $e) {
+            report($e);
+            DB::rollBack();
+            return response()->json([
+                'code' => 99,
+                'titulo' => Respuesta::titulo_error_generico,
+                'mensaje' => Respuesta::mensaje_error_guardar_notificacion
+            ]);
+        }
+        
+
+    }
 
 
 }
