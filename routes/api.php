@@ -15,6 +15,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/list/{llave?}', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
         Route::delete('/delete/{id?}', 'App\Http\Controllers\Expediente\PacienteController@deletePaciente')->name('delete-paciente');
         Route::post('/update/{id?}','App\Http\Controllers\Expediente\PacienteController@updatePaciente')->name('update');
+        Route::post('/dieta/pdf/{id}', 'App\Http\Controllers\Expediente\PacienteController@obtenerDietaPdf')->name('generar-dieta-pdf');
+        Route::post('/notificar', 'App\Http\Controllers\Expediente\PacienteController@notificarPaciente')->name('notificar-paciente');
     });
     
     Route::prefix('catalogo')->group(function(){
