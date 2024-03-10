@@ -29,13 +29,13 @@ class CatalogController extends Controller
     }
 
     public function getFrecuenciaBase(){
-        $listaBase=DB::table('nutri_catalog.alimentos_frecuencia_base')
+        $listaBase=DB::table('alimentos_frecuencia_base')
         ->select('nombre')->orderBy('id','asc')->get();
         return $listaBase;
     }
     
     public function getPaises(){
-        $listaPaises = DB::table('nutri_catalog.pais')
+        $listaPaises = DB::table('pais')
         ->select('codigo', 'nombre')
         ->orderBy('nombre', 'asc')
         ->get();
@@ -45,19 +45,19 @@ class CatalogController extends Controller
     public function getEstadosByEstadoActual($estadoActual = null){
         $listadoEstados = null;
         if($estadoActual == null){
-            $listadoEstados = DB::table('nutri_catalog.estados_consulta')
+            $listadoEstados = DB::table('estados_consulta')
             ->select('codigo', 'opcion')
             ->where('estado_previo', Estados::BORRADOR_CONSULTA)
             ->orderBy('opcion', 'desc')
             ->get();
         }else{
-            $listado = DB::table('nutri_catalog.estados_consulta')
+            $listado = DB::table('estados_consulta')
             ->select('estado_posterior')
             ->where('codigo', '=', $estadoActual)
             ->first();
 
             $listado = explode(',',$listado->estado_posterior);
-            $listadoEstados = DB::table('nutri_catalog.estados_consulta')
+            $listadoEstados = DB::table('estados_consulta')
             ->whereIn('codigo', $listado)
             ->select('codigo', 'opcion')
             ->get();

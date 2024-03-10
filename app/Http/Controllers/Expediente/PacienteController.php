@@ -67,9 +67,9 @@ class PacienteController extends Controller
                 }
             }
             $pacientes = $query
-            ->join('nutri_catalog.municipios as munic', 'munic.id', 'paciente.municipio')
-            ->join('nutri_catalog.departamentos as dep', 'dep.id', 'munic.id_departamento')
-            ->join('nutri_catalog.pais as pais', 'pais.codigo', 'dep.cod_pais')
+            ->join('municipios as munic', 'munic.id', 'paciente.municipio')
+            ->join('departamentos as dep', 'dep.id', 'munic.id_departamento')
+            ->join('pais as pais', 'pais.codigo', 'dep.cod_pais')
             ->select(
                 'paciente.id',
                 'paciente.numero_exp',

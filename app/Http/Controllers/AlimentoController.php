@@ -34,7 +34,7 @@ class AlimentoController extends Controller
                 'alimentos.potasio', 
                 'alimentos.proteinas', 
                 'alimentos.sodio')
-                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
+                ->join('pais as pais','pais.codigo','alimentos.cod_pais')
                 ->get();
         } else {
             $alimentoQuery=Alimento::select(
@@ -50,7 +50,7 @@ class AlimentoController extends Controller
                 'alimentos.potasio', 
                 'alimentos.proteinas', 
                 'alimentos.sodio')
-                ->join('nutri_catalog.pais as pais','pais.codigo','alimentos.cod_pais')
+                ->join('pais as pais','pais.codigo','alimentos.cod_pais')
                 ->where('nombre', 'like', '%'.$llave.'%')
                 ->latest()
                 ->take(15)

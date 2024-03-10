@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Log;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
-    protected $table = 'keycloak.USER_ENTITY';
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -42,4 +43,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        // agregando el rol del usuario al token
+        return ['user' => ['name' => $this->name, 'email' => $this->email, 'roles' => $this->getRoleNames()]];
+    }
+
+    public function getRoleNames()
+    {
+        Log::warning("roles:" . (isset($this->roles) ? json_encode($this->roles) : 'false')); // 'true' or 'false
+        return isset($this->roles) ? $this->roles->pluck('name') : [];
+    }
 }

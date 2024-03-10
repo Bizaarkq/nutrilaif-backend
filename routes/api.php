@@ -6,9 +6,14 @@ use App\Http\Controller\expediente\PacienteController;
 
 //endpoint publico
 //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
-
+Route::post('login', 'App\Http\Controllers\AuthController@login')->name('login');
 
 Route::group(['middleware' => 'auth:api'], function () {
+    //inicio de sesión
+    Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
+    Route::post('refresh', 'App\Http\Controllers\AuthController@refresh')->name('refresh');
+    Route::post('me', 'App\Http\Controllers\AuthController@me')->name('me');
+
     //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
     Route::prefix('paciente')->group(function(){
         Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');

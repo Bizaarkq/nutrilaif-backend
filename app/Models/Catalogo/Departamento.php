@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Departamento extends Model
 {
     use SoftDeletes;
-    protected $table="nutri_catalog.departamentos";
+    protected $table="departamentos";
     protected $primaryKey="id";
     protected $keyType="integer";
     protected $hidden = ['created_at', 'created_user', 'updated_at', 'updated_user','deleted_at'];
