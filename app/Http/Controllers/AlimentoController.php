@@ -78,9 +78,8 @@ class AlimentoController extends Controller
     public function store(Request $request)
     {
        try{
-            $cualquiera=$request->post();
             DB::beginTransaction();
-            $user = Auth::user()->USERNAME;
+            $user = Auth::user()->name;
 
             $alimento= new Alimento;
             $alimento->nombre=$request->nombre;

@@ -67,7 +67,7 @@ class CitasController extends Controller
                     $cita->id_paciente = $citaRequest['id_paciente'];
                 }
 
-                $nutri = Auth::user()->USERNAME;
+                $nutri = Auth::user()->name;
 
                 if(!$citaRequest['id']) $cita->created_user = $nutri;
                 $cita->updated_user = $nutri;
@@ -153,7 +153,7 @@ class CitasController extends Controller
                 $cita = Cita::find($citaRequest['id']);
                 $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
                 $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
-                $cita->updated_user = Auth::user()->USERNAME;
+                $cita->updated_user = Auth::user()->name;
                 $cita->save();
 
                 if($citaRequest['id_paciente'] != null){
@@ -262,9 +262,9 @@ class CitasController extends Controller
                 'tipo_nutri' => 'A',
                 'cita_especial' => $fecha,
                 'created_at' => Carbon::now(),
-                'created_user' => Auth::user()->USERNAME,
+                'created_user' => Auth::user()->name,
                 'updated_at' => Carbon::now(),
-                'updated_user' => Auth::user()->USERNAME
+                'updated_user' => Auth::user()->name
             ]);
         }else{
             if($nutriPaciente->tipo_nutri == 'A'){
@@ -274,7 +274,7 @@ class CitasController extends Controller
                 ->update([
                     'cita_especial' => $fecha,
                     'updated_at' => Carbon::now(),
-                    'updated_user' => Auth::user()->USERNAME
+                    'updated_user' => Auth::user()->name
                 ]);
             }
         }

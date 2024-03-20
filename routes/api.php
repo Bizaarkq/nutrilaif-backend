@@ -14,8 +14,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh')->name('refresh');
     Route::post('me', 'App\Http\Controllers\AuthController@me')->name('me');
 
-    //Route::post('/paciente', 'App\Http\Controllers\PacienteController@store')->name('paciente');
-    Route::prefix('paciente')->group(function(){
+    Route::prefix('paciente')
+    ->middleware('role:administativo|nutricionista')
+    ->group(function(){
         Route::post('/store', 'App\Http\Controllers\Expediente\PacienteController@store')->name('paciente');
         Route::get('/list/{llave?}', 'App\Http\Controllers\Expediente\PacienteController@listarPacientes')->name('lista-pacientes');
         Route::delete('/delete/{id?}', 'App\Http\Controllers\Expediente\PacienteController@deletePaciente')->name('delete-paciente');
@@ -24,7 +25,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/notificar', 'App\Http\Controllers\Expediente\PacienteController@notificarPaciente')->name('notificar-paciente');
     });
     
-    Route::prefix('catalogo')->group(function(){
+    Route::prefix('catalogo')
+    ->middleware('role:administativo|nutricionista')
+    ->group(function(){
         Route::get('/alimento/listar/{llave?}', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('listar-alimentos');
         Route::post('/alimento/store', 'App\Http\Controllers\AlimentoController@store')->name('guardar-alimento');
         Route::post('/alimento/update', 'App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
@@ -41,27 +44,35 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/nutricionistas', 'App\Http\Controllers\CatalogController@getNutricionistas')->name('obtener-nutricionistas');
     });
     
-    Route::prefix('consulta')->group(function(){
+    Route::prefix('consulta')
+    ->middleware('role:nutricionista')
+    ->group(function(){
         Route::post('/save/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@guardarConsulta')->name('guardar-consulta');
         Route::post('/update/{id}', 'App\Http\Controllers\Consulta\ConsultaController@editarConsulta')->name('editar-consulta');
         Route::get('/get/{id}', 'App\Http\Controllers\Consulta\ConsultaController@getConsulta')->name('obtener-consulta');
         Route::get('/list/{id?}', 'App\Http\Controllers\Consulta\ConsultaController@listarConsulta')->name('listar-consulta');
     });
 
-    Route::prefix('alimento')->group(function(){
+    Route::prefix('alimento')
+    ->middleware('role:administativo|nutricionista')
+    ->group(function(){
         Route::post('/store', 'App\Http\Controllers\AlimentoController@store')->name('alimento');
         Route::get('/list', 'App\Http\Controllers\AlimentoController@listarAlimentos')->name('lista-alimentos');
         Route::get('/update','App\Http\Controllers\AlimentoController@update')->name('editar-alimento');
         Route::get('/delete','App\Http\Controllers\AlimentoController@update')->name('eliminar-alimento');
         });
         
-    Route::prefix('cita')->group(function(){
+    Route::prefix('cita')
+    ->middleware('role:administativo|nutricionista')
+    ->group(function(){
         Route::get('/list/{id?}', 'App\Http\Controllers\Citas\CitasController@index')->name('listar-citas');
         Route::post('/save', 'App\Http\Controllers\Citas\CitasController@store')->name('guardar-cita');
         Route::post('/update/fechora', 'App\Http\Controllers\Citas\CitasController@updateFechaHora')->name('editar-hora-cita');
         Route::delete('/delete/{id}', 'App\Http\Controllers\Citas\CitasController@delete')->name('delete-cita');
     });
-    Route::prefix('pliegues')->group(function(){
+    Route::prefix('pliegues')
+    ->middleware('role:esp-pliegues')
+    ->group(function(){
         Route::post('/save/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@store')->name('guardar-pliegues');
         Route::post('/update/{id}', 'App\Http\Controllers\Especialidades\PlieguesController@update')->name('editar-pliegues');
         Route::get('/get/{id}/{idConsulta?}', 'App\Http\Controllers\Especialidades\PlieguesController@getPliegues')->name('obtener-pliegues');

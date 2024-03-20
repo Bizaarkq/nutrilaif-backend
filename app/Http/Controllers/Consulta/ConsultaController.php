@@ -195,7 +195,7 @@ class ConsultaController extends Controller
         $subConsulta = $datosConsulta['subconsulta_form'];
         $id_paciente = array_key_exists('id_paciente', $datosConsulta['paciente']) ? $datosConsulta['paciente']['id_paciente'] : null;
         $id_consulta = $id == null ? Ulid::generate(true) : $id;
-        $user = Auth::user()->USERNAME;
+        $user = Auth::user()->name;
         $numero_expediente = null;
         DB::beginTransaction();
 
