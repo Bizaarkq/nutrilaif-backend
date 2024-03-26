@@ -57,7 +57,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function getRoleNames()
     {
-        Log::warning("roles:" . (isset($this->roles) ? json_encode($this->roles) : 'false')); // 'true' or 'false
         return isset($this->roles) ? $this->roles->pluck('name') : [];
     }
 }

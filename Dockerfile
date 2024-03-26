@@ -9,4 +9,5 @@ COPY . /app
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini "$PHP_INI_DIR/php.ini"
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN composer install && php artisan jwt:secret
 RUN  a2enmod rewrite
