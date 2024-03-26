@@ -79,7 +79,7 @@ class AlimentoController extends Controller
     {
        try{
             DB::beginTransaction();
-            $user = Auth::user()->name;
+            $user = Auth::user()->codigo;
 
             $alimento= new Alimento;
             $alimento->nombre=$request->nombre;

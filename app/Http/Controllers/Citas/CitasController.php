@@ -20,7 +20,7 @@ class CitasController extends Controller
      */
     public function index()
     {
-        return DB::table('vw_citas')->where('id_nutric', Auth::user()->ID)->get();
+        return DB::table('vw_citas')->where('id_nutric', Auth::user()->id)->get();
     }
 
     /**
@@ -45,7 +45,7 @@ class CitasController extends Controller
             
             $citaRequest = $request->post();
 
-            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
+            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->id;
             $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista, $citaRequest['id']);
             if(!(array)$disponibilidad){
                 DB::beginTransaction();
@@ -67,7 +67,7 @@ class CitasController extends Controller
                     $cita->id_paciente = $citaRequest['id_paciente'];
                 }
 
-                $nutri = Auth::user()->name;
+                $nutri = Auth::user()->codigo;
 
                 if(!$citaRequest['id']) $cita->created_user = $nutri;
                 $cita->updated_user = $nutri;
@@ -143,7 +143,7 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
-            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->ID;
+            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->id;
 
             $disponibilidad = $citaRequest['id_nutric'] != null ? $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'],$citaRequest['id_nutric']) : null;    
             
@@ -153,7 +153,7 @@ class CitasController extends Controller
                 $cita = Cita::find($citaRequest['id']);
                 $cita->fecha_cita_inicio = $citaRequest['fecha_cita_inicio'];
                 $cita->fecha_cita_fin = $citaRequest['fecha_cita_fin'];
-                $cita->updated_user = Auth::user()->name;
+                $cita->updated_user = Auth::user()->codigo;
                 $cita->save();
 
                 if($citaRequest['id_paciente'] != null){
@@ -262,9 +262,9 @@ class CitasController extends Controller
                 'tipo_nutri' => 'A',
                 'cita_especial' => $fecha,
                 'created_at' => Carbon::now(),
-                'created_user' => Auth::user()->name,
+                'created_user' => Auth::user()->codigo,
                 'updated_at' => Carbon::now(),
-                'updated_user' => Auth::user()->name
+                'updated_user' => Auth::user()->codigo
             ]);
         }else{
             if($nutriPaciente->tipo_nutri == 'A'){
@@ -274,7 +274,7 @@ class CitasController extends Controller
                 ->update([
                     'cita_especial' => $fecha,
                     'updated_at' => Carbon::now(),
-                    'updated_user' => Auth::user()->name
+                    'updated_user' => Auth::user()->codigo
                 ]);
             }
         }

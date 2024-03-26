@@ -25,7 +25,7 @@ class PacienteController extends Controller
     public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
-        $nutri=Auth::user()->ID;
+        $nutri=Auth::user()->id;
         $hoy = Carbon::today()->toDateString();
         $query = DB::table('nutricionista_paciente')
         ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
@@ -261,7 +261,7 @@ class PacienteController extends Controller
                             'asunto' => $asunto,
                             'title'=> $titulo,
                             'body'=> $mensaje,
-                            'att' => Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME
+                            'att' => Auth::user()->name
                         ]));
                     }else{
                         return response()->json([
@@ -283,7 +283,7 @@ class PacienteController extends Controller
                         'asunto' => $asunto,
                         'title'=> $titulo,
                         'body'=> $mensaje,
-                        'att' => Auth::user()->FIRST_NAME . ' ' . Auth::user()->LAST_NAME
+                        'att' => Auth::user()->name
                     ]));
                 }else{
                     return response()->json([
