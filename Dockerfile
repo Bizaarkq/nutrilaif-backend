@@ -8,5 +8,12 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql gd \
 COPY . /app
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini "$PHP_INI_DIR/php.ini"
+RUN chmod -R gu+w storage/
+RUN chmod -R guo+w storage/
+RUN chmod -R gu+w bootstrap/cache/
+RUN chmod -R guo+w bootstrap/cache/
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN composer install
+RUN php artisan key:generate
+RUN php artisan jwt:secret
 RUN a2enmod rewrite
