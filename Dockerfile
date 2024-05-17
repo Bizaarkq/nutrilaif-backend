@@ -22,8 +22,11 @@ WORKDIR /app
 # Copy source code
 COPY . /app
 
+# Ensure deploy.sh is executable
+RUN chmod +x /app/deploy.sh
+
 # Expose port
 EXPOSE 80
 
-# Run deploy script
-CMD ["./deploy.sh"]
+# Start Apache in the foreground
+CMD ["apache2-foreground"]

@@ -40,5 +40,7 @@ php -m | grep -q 'pdo_mysql' || { echo "Error: PHP extension pdo_mysql not loade
 # Check if Apache configuration is loaded
 apachectl configtest || { echo "Error: Apache configuration failed."; exit 1; }
 
+echo "Configuration checks passed successfully."
+
 # Start Apache in the foreground
 apache2-foreground
