@@ -25,5 +25,8 @@ COPY . /app
 # Ensure deploy.sh is executable
 RUN chmod +x /app/deploy.sh
 
+# Set environment variable for Composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 # Run the deploy script and then start Apache
 CMD ["/bin/bash", "-c", "/app/deploy.sh && apache2-foreground"]
