@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Debug: Verify this script has execute permissions
+if [ ! -x "$0" ]; then
+    echo "Error: $0 does not have execute permissions."
+    exit 1
+fi
+
 # Set verbose mode to see all commands being executed
 set -x
 
