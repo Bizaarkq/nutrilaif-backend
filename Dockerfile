@@ -10,6 +10,5 @@ COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini "$PHP_INI_DIR/php.ini"
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN a2enmod rewrite
-COPY deploy.sh /app/deploy.sh
-RUN chmod +x /app/deploy.sh
-CMD ["/app/deploy.sh"]
+RUN chmod +x deploy.sh
+CMD ["./deploy.sh"]
