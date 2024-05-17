@@ -1,15 +1,38 @@
 #!/bin/bash
-#otorgar permisos a storage
-RUN chmod -R gu+w storage/
-RUN chmod -R guo+w storage/
-RUN chmod -R gu+w bootstrap/cache/
-RUN chmod -R guo+w bootstrap/cache/
-#ejecutar composer install
+
+# Set verbose mode to see all commands being executed
+set -x
+
+# Grant permissions to storage and cache directories
+chmod -R gu+w storage/
+chmod -R guo+w storage/
+chmod -R gu+w bootstrap/cache/
+chmod -R guo+w bootstrap/cache/
+
+# Run Composer install
 composer install --no-interaction --prefer-dist --optimize-autoloader
-#ejecutar app key
+
+# Generate app key
 php artisan key:generate
-#ejecutar a creacion de jwt_secret
+
+# Generate JWT secret
 php artisan jwt:secret
 
-#iniciar apache en primer plano
+#check permissions
+ls -la
+
+# Check if Composer dependencies are installed
+if [ ! -f "vendor/autoload.php" ]; then
+    echo "Error: Composer dependencies not installed correctly."
+    exit 1
+fi
+
+# Check PHP configuration
+php -m | grep -q 'mysqli' || { echo "Error: PHP extension mysqli not loaded."; exit 1; }
+php -m | grep -q 'pdo_mysql' || { echo "Error: PHP extension pdo_mysql not loaded."; exit 1; }
+
+# Check if Apache configuration is loaded
+apachectl configtest || { echo "Error: Apache configuration failed."; exit 1; }
+
+# Start Apache in the foreground
 apache2-foreground
