@@ -25,8 +25,5 @@ COPY . /app
 # Ensure deploy.sh is executable
 RUN chmod +x /app/deploy.sh
 
-# Expose port
-EXPOSE 80
-
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
+# Run the deploy script and then start Apache
+CMD ["/bin/bash", "-c", "/app/deploy.sh && apache2-foreground"]
