@@ -58,14 +58,10 @@ for var in "${env_vars[@]}"; do
 done
 
 # Generate APP_KEY if not set
-if ! grep -q "^APP_KEY=" .env; then
-    php artisan key:generate
-fi
+php artisan key:generate
 
 # Generate JWT secret if not set
-if ! grep -q "^JWT_SECRET=" .env; then
-    php artisan jwt:secret
-fi
+php artisan jwt:secret
 
 # Check if Composer dependencies are installed
 if [ ! -f "vendor/autoload.php" ]; then
