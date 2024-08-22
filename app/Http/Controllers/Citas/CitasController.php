@@ -20,7 +20,7 @@ class CitasController extends Controller
      */
     public function index()
     {
-        return DB::table('vw_citas')->where('id_nutric', Auth::user()->id)->get();
+        return DB::table('vw_citas')->where('id_nutric', DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id'))->get();
     }
 
     /**
@@ -45,7 +45,7 @@ class CitasController extends Controller
             
             $citaRequest = $request->post();
 
-            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->id;
+            $nutricionista = $citaRequest['id_nutric'] ??  DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id');
             $disponibilidad = $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'], $nutricionista, $citaRequest['id']);
             if(!(array)$disponibilidad){
                 DB::beginTransaction();
@@ -143,7 +143,7 @@ class CitasController extends Controller
         try{
             
             $citaRequest = $request->post();
-            $nutricionista = $citaRequest['id_nutric'] ??  Auth::user()->id;
+            $nutricionista = $citaRequest['id_nutric'] ??  DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id');
 
             $disponibilidad = $citaRequest['id_nutric'] != null ? $this->consultarDisponibilidad($citaRequest['fecha_cita_inicio'], $citaRequest['fecha_cita_fin'],$citaRequest['id_nutric']) : null;    
             

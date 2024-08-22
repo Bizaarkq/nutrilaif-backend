@@ -70,7 +70,7 @@ class CatalogController extends Controller
         $listaNutricionistas = DB::table('nutricionista')
         ->select('id', 'nombres', 'apellidos')
         ->where('deleted_at', null)
-        ->where('id', '!=' ,Auth::user()->id)
+        ->where('id', '!=' ,DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id'))
         ->orderBy('nombres', 'asc')
         ->get();
         return $listaNutricionistas;

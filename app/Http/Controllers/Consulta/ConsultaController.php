@@ -22,7 +22,7 @@ class ConsultaController extends Controller
      */
     public function listarConsulta($llave=null)
     {
-        $nutri=Auth::user()->id;
+        $nutri=DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id');
 
         if($llave==null){
             $consultas=Consulta::select('consulta.id','consulta.created_at as fecha_creacion', 'consulta.estado')
@@ -199,7 +199,7 @@ class ConsultaController extends Controller
         $numero_expediente = null;
         DB::beginTransaction();
 
-        $id_nutricionista =  Auth::user()->id;
+        $id_nutricionista =  DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id');
         if ($id==null && $id_paciente == null) {
             // si no existe la consulta y el paciente se crea uno nuevo
 

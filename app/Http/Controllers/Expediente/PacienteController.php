@@ -25,7 +25,7 @@ class PacienteController extends Controller
     public function listarPacientes($llave=null)
     {
         //Lista de pacientes enviada como json
-        $nutri=Auth::user()->id;
+        $nutri=DB::table('nutricionista')->where('username', '=', Auth::user()->codigo)->value('id');
         $hoy = Carbon::today()->toDateString();
         $query = DB::table('nutricionista_paciente')
         ->join('paciente', 'paciente.id', 'nutricionista_paciente.id_paciente')
