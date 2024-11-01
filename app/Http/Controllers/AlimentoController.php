@@ -80,23 +80,30 @@ class AlimentoController extends Controller
        try{
             DB::beginTransaction();
             $user = Auth::user()->codigo;
-
-            $alimento= new Alimento;
-            $alimento->nombre=$request->nombre;
-            $alimento->codigo=$request->codigo;
-            $alimento->cod_pais=$request->cod_pais;
-            $alimento->calorias=$request->calorias;
-            $alimento->grasas=$request->grasas;
-            $alimento->proteinas=$request->proteinas;
-            $alimento->carbohidratos=$request->carbohidratos;
-            $alimento->hierro=$request->hierro;
-            $alimento->potasio=$request->potasio;
-            $alimento->calcio=$request->calcio;
-            $alimento->sodio=$request->sodio;
-            $alimento->created_user=$user;
-            $alimento->updated_user=$user;
-            $alimento->save();
-
+            $exists = Alimento::where('codigo', $request->codigo)->exists();
+            if($exists){
+                return response()->json([
+                    'code'=>99,
+                    'titulo'=>Respuesta::titulo_error_generico,
+                    'mensaje'=>Respuesta::mensaje_error_alimentos
+                ]);
+            } else {
+                $alimento= new Alimento;
+                $alimento->nombre=$request->nombre;
+                $alimento->codigo=$request->codigo;
+                $alimento->cod_pais=$request->cod_pais;
+                $alimento->calorias=$request->calorias;
+                $alimento->grasas=$request->grasas;
+                $alimento->proteinas=$request->proteinas;
+                $alimento->carbohidratos=$request->carbohidratos;
+                $alimento->hierro=$request->hierro;
+                $alimento->potasio=$request->potasio;
+                $alimento->calcio=$request->calcio;
+                $alimento->sodio=$request->sodio;
+                $alimento->created_user=$user;
+                $alimento->updated_user=$user;
+                $alimento->save();
+            }
             DB::commit();
             return response()->json([
                 'code'=>200,
