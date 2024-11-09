@@ -78,5 +78,14 @@ apachectl configtest || { echo "Error: Apache configuration failed."; exit 1; }
 
 echo "Configuration checks passed successfully."
 
+# do request to the server to check if it is up every one minute
+while true; do
+    curl -s https://nutrilaif-backend-573v.onrender.com > /dev/null
+    if [ $? -eq 0 ]; then
+        break
+    fi
+    sleep 60
+done
+
 # Start Apache in the foreground
 apache2-foreground
